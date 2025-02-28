@@ -5,10 +5,13 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
+from django.views.decorators.http import require_POST
 
 from .forms import  TrackUploadForm
 from .models import *
+import logging
 
+logger = logging.getLogger(__name__)
 
 def signup(request):
     """
@@ -94,8 +97,9 @@ def trail(request):
 def main(request):
     albums = Album.objects.all()  # Retrieve all albums
     artists = Artist.objects.all()  # Retrieve all artists
-    genres = Genre.objects.all() 
-    return render(request, "main.html", {'albums': albums, 'artists': artists, 'genres': genres})
+    genres = Genre.objects.all()
+    musicians = User.objects.filter(profile__role='musician').exclude(id=request.user.id) if request.user.is_authenticated else []
+    return render(request, "main.html", {'albums': albums, 'artists': artists, 'genres': genres, 'musicians': musicians})
 
 # Discover page (public)
 def discover(request):
@@ -358,7 +362,7 @@ def musician_dashboard(request):
         # Collaboration requests
         collaboration_requests = CollaborationRequest.objects.filter(
             status='pending', 
-            user=request.user
+            receiver=request.user
         )
         
         context = {
@@ -383,19 +387,65 @@ def calculate_revenue(user_profile):
 
 @login_required
 def create_collaboration_request(request):
+    musicians = User.objects.filter(profile__role='musician').exclude(id=request.user.id)  # Filter only musicians
+
     if request.method == 'POST':
         title = request.POST.get('title')
         description = request.POST.get('description')
         collaboration_type = request.POST.get('type')
-        CollaborationRequest.objects.create(
-            user=request.user,
-            title=title,
-            description=description,
-            type=collaboration_type
+        receiver_id = request.POST.get('receiver')
+
+        try:
+            receiver = User.objects.get(id=receiver_id, profile__role='musician')  # Ensure selected user is a musician
+            CollaborationRequest.objects.create(
+                sender=request.user,
+                receiver=receiver,
+                title=title,
+                description=description,
+                type=collaboration_type
+            )
+            messages.success(request, "Collaboration request sent successfully!")
+            return redirect('musician_dashboard')
+        except User.DoesNotExist:
+            messages.error(request, "Invalid musician selected!")
+
+    return render(request, 'create_collaboration_request.html', {'musicians': musicians})
+
+
+@require_POST
+@login_required
+def accept_collaboration(request, request_id):
+    collab_request = get_object_or_404(CollaborationRequest, id=request_id, receiver=request.user)
+
+    # Update status to accepted
+    collab_request.status = 'accepted'
+    collab_request.save()
+
+    # Add collaboration logic here (e.g., create shared workspace, send notification)
+    # Example: create_channel_for_collaboration(collab_request)
+
+    return JsonResponse({'status': 'success', 'message': 'Collaboration accepted!'})
+
+
+@require_POST
+@login_required
+def decline_collaboration(request, request_id):
+    try:
+        collab_request = get_object_or_404(
+            CollaborationRequest,
+            id=request_id,
+            receiver=request.user,
+            status='pending'
         )
-        messages.success(request, "Collaboration request created!")
-        return redirect('musician_dashboard')
-    return render(request, 'create_collaboration_request.html')
+        collab_request.status = 'declined'
+        collab_request.save()
+        return JsonResponse({'status': 'success', 'message': 'Collaboration declined!'})
+    except Exception as e:
+        logger.error(f"Error declining collaboration: {str(e)}")
+        return JsonResponse(
+            {'status': 'error', 'message': 'Failed to process request'},
+            status=500
+        )
 
 @login_required
 def upload_track(request):

@@ -1,8 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 # Create your models here.
 
@@ -130,13 +128,15 @@ class UserPreference(models.Model):
 
 
 class CollaborationRequest(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_requests')  # Requesting user
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_requests')  # Target musician
     title = models.CharField(max_length=255)
     description = models.TextField()
     type = models.CharField(max_length=100)  # e.g., "Producer Needed"
-    status = models.CharField(max_length=20, default='pending')  # e.g., "pending", "accepted", "declined"
+    status = models.CharField(max_length=20, default='pending')  # "pending", "accepted", "declined"
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.title
+        return f"{self.sender.username} → {self.receiver.username}: {self.title}"
+
     

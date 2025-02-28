@@ -10,8 +10,9 @@
     <link rel="stylesheet" href="{% static '/css/left_bar.css' %}" />
     <link rel="stylesheet" href="{% static '/css/music_geners.css' %}" />
     <link rel="stylesheet" href="{% static '/css/popular_artists.css' %}" />
-    <link rel="stylesheet" href="{% static '/css/footer.css' %}" />
     <link rel="stylesheet" href="{% static 'css/top_albums.css' %}">
+    <link rel="stylesheet" href="{% static 'css/create_collaboration_request.css' %}">
+    <link rel="stylesheet" href="{% static '/css/footer.css' %}" />
 
   </head>
   <body>
@@ -33,8 +34,12 @@
           {% include 'top_albums.html' %}
         </div>
         <div class="music-geners-div">
+          {% include 'create_collaboration_request.html' %}
+        </div>
+        <div class="music-geners-div">
           {% include 'footer.html' %}
         </div>
+
       </div>
     </div>
   </body>

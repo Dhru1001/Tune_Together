@@ -1,7 +1,4 @@
-.header,
-.header * {
-    box-sizing: border-box;
-}
+
 
 .header {
     position: relative;
@@ -52,6 +49,7 @@
     height: 25px;
     position: relative;
     overflow: visible;
+    align-self: center;
 }
 
 .search-box {

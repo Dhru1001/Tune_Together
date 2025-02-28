@@ -1,0 +1,45 @@
+{% load static %}
+{% block create_collaboration_request %}
+{% if request.user.is_authenticated and request.user.profile.role == 'musician' %}
+<div class="collaboration-container">
+    <div class="collaboration-header">
+        <div class="collaboration-title">
+            <span>
+                <span class="title-main">Create</span>
+                <span class="title-sub">Collaboration</span>
+            </span>
+        </div>
+    </div>
+    <div class="collaboration-content">
+        <div class="collaboration-request-div">
+            <form action="{% url 'create_collaboration_request' %}" method="POST" class="collaboration-form">
+                {% csrf_token %}
+                <input type="hidden" name="sender" value="{{ request.user.id }}">
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" class="form-control" id="title" name="title" required>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="type" class="form-label">Collaboration Type</label>
+                    <input type="text" class="form-control" id="type" name="type" required>
+                </div>
+                <div class="mb-3">
+                    <label for="receiver" class="form-label">Select Musician</label>
+                    <select class="form-control" id="receiver" name="receiver" required>
+                        <option value="" disabled selected>Select a musician</option>
+                        {% for musician in musicians %}
+                            <option value="{{ musician.id }}">{{ musician.username }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit Request</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock create_collaboration_request %}

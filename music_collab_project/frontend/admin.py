@@ -55,6 +55,29 @@ class UserPreferenceAdmin(admin.ModelAdmin):
     search_fields = ('user__username',)
     ordering = ('user',)
 
+@admin.register(CollaborationRequest)
+class CollaborationRequestAdmin(admin.ModelAdmin):
+    list_display = ('title', 'sender', 'receiver', 'status', 'created_at')
+    search_fields = ('title', 'sender__username', 'receiver__username')
+    list_filter = ('status',)
+
+    actions = ['accept_requests', 'decline_requests']
+
+    def accept_requests(self, request, queryset):
+        queryset.update(status='accepted')
+        self.message_user(request, "Selected requests have been accepted.")
+
+    def decline_requests(self, request, queryset):
+        queryset.update(status='declined')
+        self.message_user(request, "Selected requests have been declined.")
+
+@admin.register(Playlist)
+class PlaylistAdmin(admin.ModelAdmin):
+    list_display = ('name', 'user', 'created_at')  # Display name, user, and creation date
+    search_fields = ('name', 'user__username')  # Allow searching by playlist name and user
+    list_filter = ('user', 'created_at')  # Filter by user and creation date
+    ordering = ('created_at',)  # Order by creation date
+
 # Customizing the admin site header
 admin.site.site_header = "Artist Management Admin"
 admin.site.site_title = "Artist Admin Portal"

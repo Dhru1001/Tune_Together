@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="{% static 'css/header.css' %}" />
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
     <!-- Bootstrap JS (required for dismissible alerts) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -83,10 +85,48 @@
             transition: background 0.3s;
         }
 
-        .upload-btn:hover {
-            background: #cc0099;
+    .btn-accept {
+            background: transparent;
+            border: 2px solid #00ff88;
+            color: #00ff88;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
+        .btn-accept:hover {
+            background: rgba(0, 255, 136, 0.1);
+            border-color: #00ff88;
+            color: #00ff88;
+            transform: translateY(-1px);
+        }
+
+        .btn-decline {
+            background: transparent;
+            border: 2px solid #ff4d4d;
+            color: #ff4d4d;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-decline:hover {
+            background: rgba(255, 77, 77, 0.1);
+            border-color: #ff4d4d;
+            color: #ff4d4d;
+            transform: translateY(-1px);
+        }
+
+        .btn-icon {
+            font-size: 1.2em;
+            margin-right: 8px;
+        }
         /* Stats Grid */
         .stats-grid {
             display: grid;
@@ -132,9 +172,9 @@
         .collab-tag {
             background: #ee10b0;
             padding: 4px 12px;
-            border-radius: 20px;
+            border-radius: 6px;
             font-size: 0.9rem;
-            margin: 0.5rem 0;
+            width: fit-content;
         }
 
         .align {
@@ -262,11 +302,21 @@
             <section>
                 <h2>Collaboration Requests</h2>
                 {% for request in collaboration_requests %}
-                <div class="collab-card">
+                <div class="collab-card" data-request-id="{{ request.id }}">
                     <div class="collab-tag">{{ request.type }}</div>
+                    <hr>
                     <h3>{{ request.title }}</h3>
                     <p>{{ request.description }}</p>
-                    <button class="upload-btn" style="margin-top: 1rem;">View Details</button>
+                    <div class="d-flex gap-3 mt-3">
+                        <button class="btn-accept" onclick="handleCollaboration('accept', {{ request.id }})">
+                            <i class="bi bi-check-circle btn-icon"></i>
+                            Accept
+                        </button>
+                        <button class="btn-decline" onclick="handleCollaboration('decline', {{ request.id }})">
+                            <i class="bi bi-x-circle btn-icon"></i>
+                            Decline
+                        </button>
+                    </div>
                 </div>
                 {% empty %}
                 <p>No collaboration requests at this time.</p>
@@ -289,5 +339,60 @@
             </div>
         </div>
     </div>
+<div id="toast-container" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
 </body>
 </html>
+
+
+
+<script>
+function handleCollaboration(action, requestId) {
+    const url = `/collaboration/${action}/${requestId}/`;
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/json'
+        },
+        credentials: 'same-origin'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.status === 'success') {
+            // Remove the card from UI for decline
+            if(action === 'decline') {
+                document.querySelector(`[data-request-id="${requestId}"]`).remove();
+            }
+            // Update UI for accept
+            if(action === 'accept') {
+                const card = document.querySelector(`[data-request-id="${requestId}"]`);
+                card.querySelector('.btn-accept').disabled = true;
+                card.querySelector('.btn-decline').disabled = true;
+                card.insertAdjacentHTML('beforeend', '<div class="badge bg-success mt-2">Collaboration Active</div>');
+            }
+            showToast(data.message, 'success');
+        }
+    })
+    .catch(error => {
+        showToast('Error processing request', 'danger');
+    });
+}
+
+function showToast(message, type) {
+    const toast = document.createElement('div');
+    toast.className = `toast align-items-center text-white bg-${type} border-0`;
+    toast.innerHTML = `
+        <div class="d-flex">
+            <div class="toast-body">${message}</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>
+    `;
+
+    const toastContainer = document.getElementById('toast-container');
+    toastContainer.appendChild(toast);
+    new bootstrap.Toast(toast).show();
+
+    setTimeout(() => toast.remove(), 3000);
+}
+</script>
