@@ -1,0 +1,42 @@
+{% load static %}
+
+{% block top_albums %}
+
+<div class="top-albums">
+    <h2>Top <span class="highlight">Albums</span></h2>
+    <div class="albums-container">
+        {% for album in albums %}
+        <div class="album-card">
+            <a href="{% url 'album_songs' album.slug %}">
+                <div class="album-img">
+                    <img src="{{ album.cover_image.url }}" alt="{{ album.title }}" class="album-cover">
+                </div>
+                <div class="album-info">
+                    <p class="album-title">{{ album.title }}</p>
+                    <p class="album-artist">{{ album.artist }}</p>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    
+    <div class="view-all-container">
+        {% if user.is_authenticated %}
+        <div onclick="location.href='{% url 'view_all_albums' %}'">
+            <div class="plus-icon-container">
+                <img class="icon-plus" src="{% static 'icons/plus.svg' %}" alt="Plus icon" />
+            </div>
+            <div class="view-all-text">View All</div>
+        </div>
+        {% else %}
+        <div onclick="location.href='{% url 'login' %}?next={% url 'view_all_albums' %}'">
+            <div class="plus-icon-container">
+                <img class="icon-plus" src="{% static 'icons/plus.svg' %}" alt="Plus icon" />
+            </div>
+            <div class="view-all-text">View All</div>
+        </div>
+        {% endif %}
+    </div>
+    </div>
+</div>
+
+{% endblock top_albums %}

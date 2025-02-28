@@ -1,0 +1,861 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: black;
+}
+
+
+.sticky-part,
+.sticky-part * {
+    box-sizing: border-box;
+}
+
+.sticky-part {
+    background: #181818;
+    border-style: solid;
+    border-color: var(--normal, #ee10b0);
+    border-width: 0px 2px 0px 0px;
+    padding: 48px 32px 3569px 64px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 270px;
+    position: relative;
+    box-shadow: 8px 0px 24.2px 0px rgba(238, 16, 176, 0.15);
+}
+
+.frame-174 {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    justify-content: flex-start;
+    align-self: stretch;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.melodies {
+    background: linear-gradient(90.07deg, rgba(238, 16, 176, 1.00) 0%, rgba(14, 158, 239, 0.92) 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: left;
+    font-family: var(--h1-font-family, 'Vazirmatn-Bold', sans-serif);
+    font-size: var(--h1-font-size, 32px);
+    font-weight: var(--h1-font-weight, 700);
+    position: relative;
+    flex: 1;
+}
+
+.frame-178 {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    justify-content: flex-start;
+    align-self: stretch;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.menu {
+    color: #ee10b0;
+    text-align: left;
+    font-family: var(--text-small-font-family, 'Vazirmatn-Light', sans-serif);
+    font-size: var(--text-small-font-size, 12px);
+    font-weight: var(--text-small-font-weight, 300);
+    opacity: 0.6;
+    position: relative;
+}
+
+.frame-10 {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    align-self: stretch;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.frame-172 {
+    background: #ee10b0;
+    border-radius: 9px;
+    padding: 2px 8px 2px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+    justify-content: center;
+    align-self: stretch;
+    flex-shrink: 0;
+    height: 40px;
+    position: relative;
+}
+
+.frame-9 {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-start;
+    align-self: stretch;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.group {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    position: relative;
+    overflow: visible;
+}
+
+.home {
+    color: #ffffff;
+    text-align: left;
+    font-family: var(--h3-font-family, 'Vazirmatn-SemiBold', sans-serif);
+    font-size: var(--h3-font-size, 20px);
+    font-weight: var(--h3-font-weight, 600);
+    position: relative;
+    flex: 1;
+    height: 28px;
+}
+
+.frame-11 {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-start;
+    align-self: stretch;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.material-symbols-light-explore-outline {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    position: relative;
+    overflow: visible;
+}
+
+.discover {
+    color: #ffffff;
+    text-align: left;
+    font-family: var(--h4-font-family, 'Vazirmatn-Medium', sans-serif);
+    font-size: var(--h4-font-size, 16px);
+    font-weight: var(--h4-font-weight, 500);
+    position: relative;
+    flex: 1;
+    height: 22px;
+}
+
+.frame-12 {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-start;
+    align-self: stretch;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.material-symbols-light-album-outline {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    position: relative;
+    overflow: visible;
+}
+
+.albums {
+    color: #ffffff;
+    text-align: left;
+    font-family: var(--h4-font-family, 'Vazirmatn-Medium', sans-serif);
+    font-size: var(--h4-font-size, 16px);
+    font-weight: var(--h4-font-weight, 500);
+    position: relative;
+    flex: 1;
+    height: 23px;
+}
+
+.frame-13 {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-start;
+    align-self: stretch;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.healthicons-ui-user-profile-outline {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    position: relative;
+    overflow: hidden;
+}
+
+.group2 {
+    width: 83.33%;
+    height: 83.33%;
+    position: absolute;
+    right: 8.33%;
+    left: 8.33%;
+    bottom: 8.33%;
+    top: 8.33%;
+    overflow: visible;
+}
+
+.artists {
+    color: #ffffff;
+    text-align: left;
+    font-family: var(--h4-font-family, 'Vazirmatn-Medium', sans-serif);
+    font-size: var(--h4-font-size, 16px);
+    font-weight: var(--h4-font-weight, 500);
+    position: relative;
+    flex: 1;
+    height: 23px;
+}
+
+.frame-175 {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    justify-content: flex-start;
+    align-self: stretch;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.library {
+    color: #ee10b0;
+    text-align: left;
+    font-family: var(--text-small-font-family, 'Vazirmatn-Light', sans-serif);
+    font-size: var(--text-small-font-size, 12px);
+    font-weight: var(--text-small-font-weight, 300);
+    opacity: 0.6;
+    position: relative;
+}
+
+.frame-14 {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-start;
+    align-self: stretch;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.fluent-mdl-2-recent {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    position: relative;
+    overflow: visible;
+}
+
+.recently-added {
+    color: #ffffff;
+    text-align: left;
+    font-family: var(--h4-font-family, 'Vazirmatn-Medium', sans-serif);
+    font-size: var(--h4-font-size, 16px);
+    font-weight: var(--h4-font-weight, 500);
+    position: relative;
+    flex: 1;
+    height: 23px;
+}
+
+.frame-15 {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-start;
+    align-self: stretch;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.arcticons-niagara-launcher-recently-installed {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    position: relative;
+    overflow: visible;
+}
+
+.most-played {
+    color: #ffffff;
+    text-align: left;
+    font-family: var(--h4-font-family, 'Vazirmatn-Medium', sans-serif);
+    font-size: var(--h4-font-size, 16px);
+    font-weight: var(--h4-font-weight, 500);
+    position: relative;
+    flex: 1;
+    height: 23px;
+}
+
+.frame-177 {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    justify-content: flex-start;
+    align-self: stretch;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.playlist-and-favorite {
+    color: #ee10b0;
+    text-align: left;
+    font-family: var(--text-small-font-family, 'Vazirmatn-Light', sans-serif);
+    font-size: var(--text-small-font-size, 12px);
+    font-weight: var(--text-small-font-weight, 300);
+    opacity: 0.6;
+    position: relative;
+}
+
+.frame-16 {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-start;
+    align-self: stretch;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.ph-heart-light {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    position: relative;
+    overflow: visible;
+}
+
+.your-favorites {
+    color: #ffffff;
+    text-align: left;
+    font-family: var(--h4-font-family, 'Vazirmatn-Medium', sans-serif);
+    font-size: var(--h4-font-size, 16px);
+    font-weight: var(--h4-font-weight, 500);
+    position: relative;
+    flex: 1;
+    height: 23px;
+}
+
+.frame-17 {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-start;
+    align-self: stretch;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.ph-playlist {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    position: relative;
+    overflow: visible;
+}
+
+.your-playlist {
+    color: #ffffff;
+    text-align: left;
+    font-family: var(--h4-font-family, 'Vazirmatn-Medium', sans-serif);
+    font-size: var(--h4-font-size, 16px);
+    font-weight: var(--h4-font-weight, 500);
+    position: relative;
+    flex: 1;
+    height: 23px;
+}
+
+.frame-18 {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-start;
+    align-self: stretch;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.subway-add-playlist {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    position: relative;
+    overflow: visible;
+}
+
+.add-playlist {
+    color: #0e9eef;
+    text-align: left;
+    font-family: var(--h4-font-family, 'Vazirmatn-Medium', sans-serif);
+    font-size: var(--h4-font-size, 16px);
+    font-weight: var(--h4-font-weight, 500);
+    position: relative;
+    flex: 1;
+    height: 23px;
+}
+
+.frame-176 {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    justify-content: flex-start;
+    align-self: stretch;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.general {
+    color: #ee10b0;
+    text-align: left;
+    font-family: var(--text-small-font-family, 'Vazirmatn-Light', sans-serif);
+    font-size: var(--text-small-font-size, 12px);
+    font-weight: var(--text-small-font-weight, 300);
+    opacity: 0.6;
+    position: relative;
+}
+
+.frame-19 {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-start;
+    align-self: stretch;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.lets-icons-setting-line {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    position: relative;
+    overflow: visible;
+}
+
+.setting {
+    color: #ffffff;
+    text-align: left;
+    font-family: var(--h4-font-family, 'Vazirmatn-Medium', sans-serif);
+    font-size: var(--h4-font-size, 16px);
+    font-weight: var(--h4-font-weight, 500);
+    position: relative;
+    flex: 1;
+    height: 24px;
+}
+
+.frame-20 {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-start;
+    align-self: stretch;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.line-md-log-out {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    position: relative;
+    overflow: hidden;
+}
+
+.group3 {
+    width: 66.67%;
+    height: 75%;
+    position: absolute;
+    right: 12.5%;
+    left: 20.83%;
+    bottom: 12.5%;
+    top: 12.5%;
+    overflow: visible;
+}
+
+.logout {
+    color: #ee10b0;
+    text-align: left;
+    font-family: var(--h4-font-family, 'Vazirmatn-Medium', sans-serif);
+    font-size: var(--h4-font-size, 16px);
+    font-weight: var(--h4-font-weight, 500);
+    position: relative;
+    flex: 1;
+    height: 23px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.hero-section,
+.hero-section * {
+    box-sizing: border-box;
+}
+
+.hero-section {
+    position: relative;
+    width: -webkit-fill-available;
+}
+
+._1000-f-645546712-cl-v-1-so-tw-mf-2-k-99-veh-5-c-vx-7-t-v-qc-38-k-6-hp-1 {
+    border-radius: 25px;
+    width: 100%;
+    height: 595px;
+    position: absolute;
+    object-fit: cover;
+}
+
+.hero-section2 {
+    display: flex;
+    flex-direction: column;
+    gap: 114px;
+    align-items: flex-start;
+    justify-content: center;
+    width: 95.37%;
+    position: absolute;
+    right: 2.31%;
+    left: 2.31%;
+    top: 16px;
+}
+
+.frame-183 {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    align-items: center;
+    justify-content: flex-start;
+    align-self: stretch;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.search-bar {
+    background: #1f1f1f;
+    border-radius: 10px;
+    padding: 6px 8px 6px 8px;
+    display: flex;
+    flex-direction: row;
+    gap: 3px;
+    align-items: center;
+    justify-content: flex-start;
+    flex: 1;
+    height: 38px;
+    position: relative;
+}
+
+.frame-1832 {
+    display: flex;
+    flex-direction: row;
+    gap: 3px;
+    align-items: center;
+    justify-content: flex-start;
+    flex: 1;
+    position: relative;
+}
+
+.basil-search-outline {
+    flex-shrink: 0;
+    width: 25px;
+    height: 25px;
+    position: relative;
+    overflow: visible;
+}
+
+.frame-164 {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.search-for-musics-artists {
+    color: #ffffff;
+    text-align: left;
+    font-family: var(--text-small-font-family, 'Vazirmatn-Light', sans-serif);
+    font-size: var(--text-small-font-size, 12px);
+    font-weight: var(--text-small-font-weight, 300);
+    opacity: 0.6;
+    position: relative;
+}
+
+.titles {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    position: relative;
+}
+
+.frame-165 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    align-self: stretch;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.about-us {
+    color: #ffffff;
+    text-align: center;
+    font-family: var(--h4-font-family, 'Vazirmatn-Medium', sans-serif);
+    font-size: var(--h4-font-size, 16px);
+    font-weight: var(--h4-font-weight, 500);
+    position: relative;
+    flex: 1;
+}
+
+.contact {
+    color: #ffffff;
+    text-align: center;
+    font-family: var(--h4-font-family, 'Vazirmatn-Medium', sans-serif);
+    font-size: var(--h4-font-size, 16px);
+    font-weight: var(--h4-font-weight, 500);
+    position: relative;
+    flex: 1;
+}
+
+.premuim {
+    color: #ffffff;
+    text-align: center;
+    font-family: var(--h4-font-family, 'Vazirmatn-Medium', sans-serif);
+    font-size: var(--h4-font-size, 16px);
+    font-weight: var(--h4-font-weight, 500);
+    position: relative;
+    flex: 1;
+}
+
+.frame-76 {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    align-items: center;
+    justify-content: flex-start;
+    flex: 1;
+    position: relative;
+}
+
+.button {
+    border-radius: 4px;
+    border-style: solid;
+    border-color: var(--normal, #ee10b0);
+    border-width: 1px;
+    padding: 6px 16px 6px 16px;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    height: 36px;
+    position: relative;
+}
+
+.button2 {
+    color: var(--normal, #ee10b0);
+    text-align: center;
+    font-family: 'Vazirmatn-Light', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    position: relative;
+}
+
+.button3 {
+    background: var(--normal, #ee10b0);
+    border-radius: 4px;
+    padding: 6px 16px 6px 16px;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    height: 36px;
+    position: relative;
+}
+
+.button4 {
+    color: #ffffff;
+    text-align: center;
+    font-family: 'Vazirmatn-Light', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    position: relative;
+}
+
+.frame-182 {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+    justify-content: flex-start;
+    flex-shrink: 0;
+    width: 352px;
+    position: relative;
+}
+
+.frame-181 {
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    align-self: stretch;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.frame-180 {
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    align-self: stretch;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.on-our-website-you-can-access-an-amazing-collection-of-popular-and-new-songs-stream-your-favorite-tracks-in-high-quality-and-enjoy-without-interruptions-whatever-your-taste-in-music-we-have-it-all-for-you {
+    color: #ffffff;
+    text-align: justified;
+    font-family: var(--text-small-font-family, 'Vazirmatn-Light', sans-serif);
+    font-size: var(--text-small-font-size, 12px);
+    font-weight: var(--text-small-font-weight, 300);
+    position: relative;
+    width: 332px;
+}
+
+.frame-179 {
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+    align-items: center;
+    justify-content: center;
+    align-self: stretch;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.button5 {
+    background: var(--normal, #ee10b0);
+    border-radius: 4px;
+    padding: 8px 24px 8px 24px;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    height: 40px;
+    position: relative;
+}
+
+.button6 {
+    color: #ffffff;
+    text-align: center;
+    font-family: 'Vazirmatn-Medium', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    position: relative;
+}
+
+.button7 {
+    border-radius: 4px;
+    border-style: solid;
+    border-color: var(--normal, #0e9eef);
+    border-width: 1px;
+    padding: 8px 24px 8px 24px;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    height: 40px;
+    position: relative;
+}
+
+.button8 {
+    color: var(--normal, #0e9eef);
+    text-align: center;
+    font-family: 'Vazirmatn-Medium', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    position: relative;
+}
+
+.meowmain{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+}

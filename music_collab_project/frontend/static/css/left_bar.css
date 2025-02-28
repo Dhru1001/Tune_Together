@@ -1,0 +1,151 @@
+
+.left-bar,
+.left-bar * {
+    box-sizing: border-box;
+}
+
+.left-bar {
+    background: #181818;
+    border-style: solid;
+    border-color: var(--normal, #ee10b0);
+    border-width: 0px 2px 0px 0px;
+    padding: 48px 32px 64px 64px; /* Removed the 500px padding */
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 270px;
+    position: relative;
+    box-shadow: 8px 0px 24.2px 0px rgba(238, 16, 176, 0.15);
+    height: 100%; /* Make it extend to the full height of its parent container */
+}
+a{
+    text-decoration: none;
+}
+.logo {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    justify-content: flex-start;
+    align-self: stretch;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.synk {
+    background: linear-gradient(90.07deg, rgba(238, 16, 176, 1.00) 0%, rgba(14, 158, 239, 0.92) 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: left;
+    font-family: var(--h1-font-family, 'Vazirmatn-Bold', sans-serif);
+    font-size: var(--h1-font-size, 32px);
+    font-weight: var(--h1-font-weight, 700);
+    position: relative;
+    flex: 1;
+    font-size: 30px;
+
+}
+
+
+.sticky-frame-1 {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    justify-content: flex-start;
+    align-self: stretch;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.menu {
+    color: #ee10b0;
+    text-align: left;
+    font-family: var(--text-small-font-family, 'Vazirmatn-Light', sans-serif);
+    font-size: var(--text-small-font-size, 12px);
+    font-weight: var(--text-small-font-weight, 300);
+    opacity: 0.6;
+    position: relative;
+}
+
+/* Base container with hover effects */
+.hover-frame {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-start;
+    align-self: stretch;
+    flex-shrink: 0;
+    position: relative;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    text-decoration: none; /* Ensures no underline or default styling */
+}
+
+.hover-frame:hover {
+    background: #ee10b0;
+    border-radius: 9px;
+    padding: 2px 8px;
+    height: 40px;
+}
+
+/* Reusable class for icons */
+.icon {
+    width: 16px;
+    height: 16px;
+    transition: width 0.3s ease, height 0.3s ease;
+}
+
+.hover-frame:hover .icon {
+    width: 24px;
+    height: 24px;
+}
+
+/* Reusable class for text hover */
+.hover-text {
+    color: #ffffff;
+    font-family: 'Vazirmatn-Medium', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    height: 23px;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.hover-frame:hover .hover-text {
+    font-family: 'Vazirmatn-SemiBold', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    height: 28px;
+}
+
+/* Specific hover effect for Blue */
+.new-hover-frame:hover {
+    background: none; /* No background color change on hover */
+}
+
+.new-hover-frame:hover .icon {
+    filter: invert(37%) sepia(100%) saturate(1800%) hue-rotate(190deg) brightness(94%) contrast(93%); /* Change icon color to blue */
+}
+
+.new-hover-frame:hover .hover-text {
+    color: #0e9eef; /* Change text color to blue */
+}
+
+/* Specific hover effect for Pink */
+.new2-hover-frame:hover {
+    background: none; /* No background color change on hover */
+}
+
+.new2-hover-frame:hover .icon {
+    filter: invert(27%) sepia(95%) saturate(7461%) hue-rotate(317deg) brightness(91%) contrast(97%); /* Change icon color to blue */
+}
+
+.new2-hover-frame:hover .hover-text {
+    color: #ee10b0; /* Change text color to pink */
+}
+

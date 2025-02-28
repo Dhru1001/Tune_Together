@@ -1,0 +1,44 @@
+{% load static %}
+{% block music_genres %}
+
+<div class="music-genres-container">
+    <div class="genres-header">
+        <div class="genres-title">
+            <span>
+                <span class="title-main">Music</span>
+                <span class="title-sub">Genres</span>
+            </span>
+        </div>
+    </div>
+    <div class="genres-content">
+        <div class="genres-list">
+            {% for genre in genres|slice:":5" %}
+                <div class="genre-item" 
+                     style="background: url({% if genre.background_image %}{{ genre.background_image.url }}{% else %}{% static 'img/default-genre-background.png' %}{% endif %}) center; background-size: cover; background-repeat: no-repeat;"
+                     onclick="location.href='genre/{{ genre.slug }}'">
+                    <span class="genre-name">{{ genre.name }}</span>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="view-all-container">
+            {% if user.is_authenticated %}
+                <!-- If user is logged in, allow access -->
+                <div onclick="location.href='{% url 'view_all_genres' %}'">
+                    <div class="plus-icon-container">
+                        <img class="icon-plus" src="{% static 'icons/plus.svg' %}" alt="Plus icon" />
+                    </div>
+                    <div class="view-all-text">View All</div>
+                </div>
+            {% else %}
+                <div onclick="location.href='{% url 'view_all_genres' %}'">
+                    <div class="plus-icon-container">
+                        <img class="icon-plus" src="{% static 'icons/plus.svg' %}" alt="Plus icon" />
+                    </div>
+                    <div class="view-all-text">View All</div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock music_genres %}

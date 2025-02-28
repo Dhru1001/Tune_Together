@@ -1,0 +1,111 @@
+body {
+    background-color: #141414;
+    font-family: 'Arial', sans-serif;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+}
+
+.main-container {
+    padding: 20px;
+}
+
+.hero-section {
+    display: flex;
+    justify-content: flex-start; /* Center the text horizontally */
+    align-items: center; /* Center the text vertically */
+    padding: 50px 0;
+    background-image: url("/static/img/hero_image.png"); /* Background image for the whole section */
+    background-size: cover; /* Ensure the image covers the entire section */
+    background-position: center; /* Center the background image */
+    background-repeat: no-repeat; /* Avoid repetition of the image */
+    height: 500px; /* Adjust height as needed */
+    color: white;
+    position: relative;
+    border-radius: 30px;
+}
+
+.hero-text {
+    z-index: 1; /* Make sure the text is on top of the background */
+    max-width: 50%;
+    text-align: left;
+    padding: 0px 0px 0px 20px
+}
+
+.hero-text h1 {
+    font-size: 3em;
+    color: #fff;
+}
+
+.hero-text h1 span {
+    color: #ff4081;
+}
+
+.hero-text p {
+    font-size: 1.2em;
+    margin-top: 20px;
+}
+
+.hero-buttons {
+    margin-top: 20px;
+}
+
+.hero-buttons button {
+    padding: 10px 20px;
+    margin-right: 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.discover-btn {
+    background-color: #ff4081;
+    color: white;
+}   
+
+.playlist-btn {
+    background-color: transparent;
+    border: 1px solid #fff;
+    color: #fff;
+}
+
+.hero-image img {
+    width: 100%;
+    height: auto;
+    max-width: 400px;
+}
+
+.weekly-top-songs, .new-release-songs {
+    margin-top: 50px;
+}
+
+.weekly-top-songs h2, .new-release-songs h2 {
+    color: #ff4081;
+    font-size: 2em;
+}
+
+.song-list {
+    display: flex;
+    gap: 20px;
+}
+
+.song {
+    text-align: center;
+    max-width: 150px;
+}
+
+.song img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.song p {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.song span {
+    font-size: 0.9em;
+    color: #bbb;
+}

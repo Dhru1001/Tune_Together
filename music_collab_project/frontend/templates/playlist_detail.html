@@ -1,0 +1,196 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ playlist.name }}</title>
+    <link rel="stylesheet" href="{% static 'css/header.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/footer.css' %}" />
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ee10b0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #1f1f1f;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            color: #fff;
+        }
+
+        th {
+            background-color: #2a2a2a;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #292929;
+        }
+
+        tr:hover {
+            background-color: #333333;
+        }
+
+        img {
+            height: 60px;
+            width: 60px;
+            border-radius: 5px;
+            object-fit: cover;
+        }
+
+        .time, .album {
+            color: #bbb;
+            font-size: 14px;
+        }
+
+        .play-pause-btn {
+            background-color: transparent;
+            border-radius: 2px;
+            border: none;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .align {
+            padding: 20px;
+        }
+
+        .navigation-links {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .navigation-links a {
+            color: #ee10b0;
+            font-size: 16px;
+            text-decoration: none;
+            margin: 0 10px;
+            padding: 10px;
+            border: 2px solid #ee10b0;
+            border-radius: 5px;
+        }
+
+        .navigation-links a:hover {
+            background-color: #ee10b0;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="align">
+        {% include "header.html" %}
+    </div>
+    <div class="container">
+        <h1>{{ playlist.name }}</h1>
+        <p>{{ playlist.description }}</p>
+        <h3>Tracks:</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Cover</th>
+                    <th>Title</th>
+                    <th>Artist</th>
+                    <th>Release Date</th>
+                    <th>Album</th>
+                    <th>Time</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for track in playlist.tracks.all %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>
+                        {% if track.cover_image %}
+                            <img src="{{ track.cover_image.url }}" alt="{{ track.title }} Cover">
+                        {% else %}
+                            <img src="{% static 'default_cover.jpg' %}" alt="Default Cover">
+                        {% endif %}
+                    </td>
+                    <td>{{ track.title }}</td>
+                    <td>{{ track.artist }}</td>
+                    <td class="time">{{ track.release_date|date:"M d, Y" }}</td>
+                    <td class="album">{{ track.album }}</td>
+                    <td class="time">{{ track.duration }}</td>
+                    <td>
+                        <!-- Play/Pause Buttons -->
+                        <audio id="audio-{{ forloop.counter }}" src="{{ track.audio_file.url }}"></audio>
+                        <button class="play-pause-btn" onclick="togglePlayPause({{ forloop.counter }})">
+                            <span id="play-icon-{{ forloop.counter }}">▶</span>
+                        </button>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" style="text-align: center; color: #888;">No tracks available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="navigation-links">
+            <a href="{% url "discover" %}">Discover More</a>
+            <a href="{% url "main" %}">Home</a>
+        </div>
+    </div>
+    {% include "footer.html" %}
+
+    <script>
+        // Toggle Play/Pause Functionality
+        let currentAudio = null;
+
+        function togglePlayPause(trackId) {
+            const audio = document.getElementById(`audio-${trackId}`);
+            const playIcon = document.getElementById(`play-icon-${trackId}`);
+
+            if (currentAudio && currentAudio !== audio) {
+                currentAudio.pause();
+                resetPlayIcons();
+            }
+
+            if (audio.paused) {
+                audio.play();
+                playIcon.textContent = "⏸";
+                currentAudio = audio;
+            } else {
+                audio.pause();
+                playIcon.textContent = "▶";
+            }
+        }
+
+        function resetPlayIcons() {
+            document.querySelectorAll('[id^="play-icon-"]').forEach(icon => {
+                icon.textContent = "▶";
+            });
+        }
+    </script>
+</body>
+</html>

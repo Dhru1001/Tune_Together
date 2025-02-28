@@ -1,0 +1,328 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ artist_name }} Tracks</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/header.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/footer.css' %}" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 20px;
+        }
+        .header_artist {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            margin-bottom: 20px;
+            gap: 20px;
+        }
+        .header_artist img {
+            height: 150px;
+            border-radius: 10px;
+        }
+        .header_artist .info {
+            flex-grow: 1;
+        }
+        .header_artist .info h1 {
+            font-size: 28px;
+            margin: 0;
+            color: #ee10b0;
+        }
+        .header_artist .info p {
+            margin: 5px 0;
+            color: #bbb;
+        }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #1f1f1f;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .table th, .table td {
+            padding: 10px;
+            text-align: left;
+        }
+        .table th {
+            background-color: #2a2a2a;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+        .table tr:nth-child(even) {
+            background-color: #292929;
+        }
+        .table tr:hover {
+            background-color: #333333;
+        }
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+        .actions button {
+            background-color: #ee10b0;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .actions button i {
+            margin-right: 5px;
+        }
+        .align {
+            padding: 20px;
+        }
+        .navigation-links {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .navigation-links a {
+            color: #ee10b0;
+            font-size: 16px;
+            text-decoration: none;
+            margin: 0 10px;
+            padding: 10px;
+            border: 2px solid #ee10b0;
+            border-radius: 5px;
+        }
+
+        .navigation-links a:hover {
+            background-color: #ee10b0;
+            color: #fff;
+        }
+
+        .like-button {
+            background-color: transparent;
+            border: none;
+            color: #ee10b0;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+        }
+
+        .liked {
+            color: #ee10b0;
+        }
+        .img-artist-tracks {
+            height: 60px;
+            width: 60px;
+            border-radius: 5px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <div class="align">
+        {% include "header.html" %}
+    </div>
+    <div class="container">
+        <div class="header_artist">
+            <img src="{% static 'img/'|add:artist_name|add:'.png' %}" alt="{{ artist_name }} Cover">
+            <div class="info">
+                <h1>{{ artist_name }} Tracks</h1>
+                <p><strong>{{ tracks|length }} songs</strong></p>
+            </div>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Cover</th> <!-- New Cover Image Column -->
+                    <th>Title</th>
+                    <th>Release Date</th>
+                    <th>Album</th>
+                    <th>Duration</th>
+                    <th>Actions</th>
+                    {% if is_authenticated %}
+                    <th>Like</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for track in tracks %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <!-- Track Cover Image -->
+                    <td>
+                        <img src="{{ track.cover_image.url }}" alt="{{ track.title }} Cover" class="img-artist-tracks">
+                    </td>
+                    <td>{{ track.title }}</td>
+                    <td>{{ track.release_date }}</td>
+                    <td>{{ track.album }}</td>
+                    <td>{{ track.duration }}</td>
+                    <td>
+                        <audio id="audio-{{ track.id }}" src="{{ track.audio_file.url }}" preload="none"></audio>
+                        <div class="actions">
+                            <button onclick="playAudio({{ track.id }}, {{ is_authenticated|yesno:'true,false' }})">
+                                <i class="fa fa-play"></i> Play
+                            </button>
+                            <button onclick="pauseAudio({{ track.id }})">
+                                <i class="fa fa-pause"></i> Pause
+                            </button>
+                        </div>
+                    </td>
+                    {% if is_authenticated %}
+                    <td>
+                        <button class="like-button" id="like-btn-{{ track.id }}"
+                            onclick="likeSong({{ track.id }})"
+                            {% if track.id in liked_tracks_ids %}
+                                class="liked"
+                            {% endif %}>
+                            <i class="fa fa-heart"></i> 
+                            {% if track.id in liked_tracks_ids %}
+                                Liked
+                            {% else %}
+                                Like
+                            {% endif %}
+                        </button>
+                    </td>
+                    {% endif %}
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8">No tracks available for {{ artist_name }}.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="navigation-links">
+            <a href="{% url 'main' %}">Home</a>
+            {% if is_authenticated %}
+            <a href="{% url 'liked_songs' %}">Liked Songs</a>
+            {% endif %}
+        </div>
+    </div>
+    {% include "footer.html" %}
+
+    <script>
+        let currentAudio = null; // Keep track of the currently playing audio
+
+        function playAudio(trackId, isAuthenticated) {
+            const audio = document.getElementById(`audio-${trackId}`);
+
+            // Stop currently playing audio if it exists and is different from the new audio
+            if (currentAudio && currentAudio !== audio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0; // Reset the audio to the start
+            }
+
+            // Set the new audio as the current audio
+            currentAudio = audio;
+
+            // Play the audio
+            audio.play();
+
+            // Send the request to increment the play count for the track
+            fetch(`/increment-play-count/${trackId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}', // Ensure CSRF token is included
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('Play count incremented');
+                } else {
+                    console.error('Error updating play count');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+            // Handle authenticated vs. unauthenticated users
+            if (!isAuthenticated) {
+                // Limit playback to 30 seconds for unauthenticated users
+                audio.currentTime = 0; // Start from the beginning
+                audio.play();
+
+                setTimeout(() => {
+                    // Stop playback after 30 seconds
+                    audio.pause();
+
+                    // Show confirmation dialog
+                    const loginPrompt = confirm('Sign in to listen to the full track! Do you want to log in now?');
+
+                    // If the user clicks "OK" (i.e., they want to log in), redirect them to the login page
+                    if (loginPrompt) {
+                        window.location.href = '/login/'; // Redirect to login page
+                    } else {
+                        // If the user clicks "Cancel", stop the audio and prevent further play
+                        currentAudio = null;  // Clear the reference to current audio
+                    }
+                }, 30000); // Stop playback after 30 seconds
+            }
+        }
+
+        function pauseAudio(trackId) {
+            const audio = document.getElementById(`audio-${trackId}`);
+            if (audio) {
+                audio.pause();
+                if (currentAudio === audio) {
+                    currentAudio = null; // Clear currentAudio if paused
+                }
+            }
+        }
+
+        function likeSong(trackId) {
+            const likeButton = document.getElementById(`like-btn-${trackId}`);
+
+            // Optimistic UI: Immediately update UI
+            if (likeButton.classList.contains('liked')) {
+                likeButton.classList.remove('liked');
+                likeButton.innerHTML = '<i class="fa fa-heart"></i> Like';
+            } else {
+                likeButton.classList.add('liked');
+                likeButton.innerHTML = '<i class="fa fa-heart"></i> Liked';
+            }
+
+            // Send the request to the server to update the like status
+            fetch(`/like-song/${trackId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}', // Ensure CSRF token is included
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'unliked') {
+                    likeButton.classList.remove('liked');
+                    likeButton.innerHTML = '<i class="fa fa-heart"></i> Like';
+                } else if (data.status === 'liked') {
+                    likeButton.classList.add('liked');
+                    likeButton.innerHTML = '<i class="fa fa-heart"></i> Liked';
+                }
+            })
+            .catch(error => {
+                console.error('Error liking song:', error);
+                // If an error occurs, revert the UI change
+                if (likeButton.classList.contains('liked')) {
+                    likeButton.classList.remove('liked');
+                    likeButton.innerHTML = '<i class="fa fa-heart"></i> Like';
+                } else {
+                    likeButton.classList.add('liked');
+                    likeButton.innerHTML = '<i class="fa fa-heart"></i> Liked';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

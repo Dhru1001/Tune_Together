@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Preferences</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #a1c4fd, #c2e9fb);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        h1 {
+            margin-bottom: 30px;
+            color: #333;
+            font-size: 2rem;
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 600px;
+            position: relative;
+        }
+        
+        .tile {
+            position: relative;
+            padding: 20px;
+            background: white;
+            border-radius: 25px;
+            text-align: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tile:hover {
+            background: #f7f7f7;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+            transform: scale(1.05);
+        }
+        
+        .tile.selected {
+            background: black;
+            color: white;
+            border-color: black;
+            position: relative;
+            animation: marqueeEffect 2s linear infinite; /* Marquee effect */
+        }
+        
+        @keyframes marqueeRightToLeft {
+            0% {
+                transform: translateX(100%);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+        
+        @keyframes marqueeLeftToRight {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
+        
+        .row-odd {
+            animation: marqueeRightToLeft 5s linear infinite;
+        }
+        
+        .row-even {
+            animation: marqueeLeftToRight 5s linear infinite;
+        }
+        
+        /* Animation for the last item fading and pushing others */
+        @keyframes fadeAndShift {
+            0% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            50% {
+                opacity: 0;
+                transform: translateX(100%); /* Push it to the right end */
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0); /* Reappear at the start */
+            }
+        }
+        
+        .tile.last-in-row {
+            animation: fadeAndShift 4s ease-in-out infinite; /* Fade and shift animation */
+        }
+        
+        .tile .checkmark {
+            display: none;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            border: 2px solid black;
+            color: black;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            line-height: 16px;
+        }
+        
+        .tile.selected .checkmark {
+            display: block;
+        }
+        
+        .tile input[type="checkbox"] {
+            display: none;
+        }
+        
+        button {
+            margin-top: 30px;
+            padding: 12px 25px;
+            background: black;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        button:hover {
+            background: #333;
+        }
+        
+        
+    </style>
+</head>
+<body>
+    <h1>Select Your Preferences</h1>
+    <form method="POST" action="">
+        {% csrf_token %}
+        <div class="container">
+            {% for preference in preferences %}
+            <label class="tile">
+                {{ preference.name }}
+                <span class="checkmark">✔</span>
+                <input type="checkbox" name="preferences" value="{{ preference.id }}">
+            </label>
+            {% endfor %}
+        </div>
+        <button type="submit">Save Preferences</button>
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tiles = document.querySelectorAll('.tile');
+            
+            // Group tiles by rows (dynamically based on the number of tiles)
+            const rows = Array.from(tiles).reduce((rows, tile, index) => {
+                const rowIndex = Math.floor(index / 4); // Change 3 to the number of items per row
+                if (!rows[rowIndex]) rows[rowIndex] = [];
+                rows[rowIndex].push(tile);
+                return rows;
+            }, []);
+            
+            // Apply animations to the rows
+            rows.forEach((row, index) => {
+                row.forEach((tile, tileIndex) => {
+                    // Apply the alternating animations to the rows
+                    if (index % 2 === 0) {
+                        tile.classList.add('row-even'); // Left to right for even rows
+                    } else {
+                        tile.classList.add('row-odd');  // Right to left for odd rows
+                    }
+                });
+            });
+        
+            tiles.forEach(tile => {
+                tile.addEventListener('click', (e) => {
+                    if (e.target !== tile.querySelector('input[type="checkbox"]')) {
+                        tile.classList.toggle('selected');
+                        
+                        const checkbox = tile.querySelector('input[type="checkbox"]');
+                        checkbox.checked = !checkbox.checked; // Toggle the checkbox state
+                    }
+                });
+            });
+        });
+        
+        
+    </script>
+</body>
+</html>

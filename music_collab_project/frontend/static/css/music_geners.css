@@ -1,0 +1,86 @@
+.music-genres-container,
+.music-genres-container * {
+    box-sizing: border-box;
+}
+
+.music-genres-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.genres-header {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.genres-title {
+    text-align: left;
+    font-family: var(--h1-font-family, 'Vazirmatn-Bold', sans-serif);
+    font-size: var(--h1-font-size, 32px);
+    font-weight: 700;
+}
+
+.title-main {
+    color: #ffffff;
+}
+
+.title-sub {
+    color: #ee10b0;
+}
+
+.genres-content {
+    display: flex;
+    gap: 36px;
+}
+
+.genres-list {
+    display: flex;
+    gap: 24px;
+    flex: 1;
+}
+
+.genre-item {
+    background: linear-gradient(to left, rgba(0, 0, 0, 0.30), rgba(0, 0, 0, 0.30));
+    border-radius: 5px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    flex: 1;
+    height: 170px;
+    cursor: pointer; /* Change cursor to pointer for clickable items */
+}
+
+.view-all-container {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-direction: column;
+    justify-content: center;
+    cursor: pointer; /* Change cursor to pointer for clickable view all */
+}
+
+.plus-icon-container {
+    background: #1e1e1e;
+    border-radius: 31px;
+    padding: 18px;
+    display: flex;
+    align-items: center;
+    transition: background 0.3s; /* Smooth transition for hover */
+}
+
+.plus-icon-container:hover {
+    background: #ee10b0; /* Change color on hover */
+}
+
+.icon-plus {
+    width: 24px;
+    height: 24px;
+}
+
+.view-all-text {
+    color: #ffffff;
+    font-family: var(--h4-font-family, 'Vazirmatn-Medium', sans-serif);
+    font-size: var(--h4-font-size, 16px);
+    font-weight: 500;
+}

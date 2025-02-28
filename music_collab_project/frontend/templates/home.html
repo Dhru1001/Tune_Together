@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Melodies - Home</title>
+    <link rel="stylesheet" href="{% static '/css/header.css' %}">
+    <link rel="stylesheet" href="{% static '/css/home.css' %}">
+</head>
+<body>
+    <!-- Including the header from the header.html -->
+
+    {% include 'header.html' %} 
+    <div class="main-container">
+        <section class="hero-section">
+
+            <div class="hero-text">
+                <h1>All the <span>Best Songs</span> in One Place</h1>
+                <p>Explore new albums, create playlists, and enjoy your favorite music. Dive into the top hits and discover what's new.</p>
+                <div class="hero-buttons">
+                    <button class="discover-btn">Discover Now</button>
+                    <button class="playlist-btn">Create Playlist</button>
+                </div>
+            </div>
+            {% comment %} <div class="hero-image">
+                <img src="{% static '/img/hero_image.png' %}" alt="Music Experience">
+            </div> {% endcomment %}
+        </section>
+        
+        <section class="weekly-top-songs">
+            <h2>Weekly Top Songs</h2>
+            <div class="song-list">
+                <div class="song">
+                    <img src="{% static '/img/Imagine_Dragons.jpg' %}" alt="Song Album">
+                    <p>Whatever It Takes</p>
+                    <span>Imagine Dragons</span>
+                </div>
+                <!-- Repeat for other songs -->
+            </div>
+        </section>
+
+        <section class="new-release-songs">
+            <h2>New Release Songs</h2>
+            <div class="song-list">
+                <div class="song">
+                    <img src="path_to_song_image.jpg" alt="Song Album">
+                    <p>Time</p>
+                    <span>112</span>
+                </div>
+                <!-- Repeat for other songs -->
+            </div>
+        </section>
+    </div>
+</body>
+</html>

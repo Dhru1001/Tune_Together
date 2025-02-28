@@ -1,0 +1,305 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Album Songs</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/header.css' %}">
+    <link rel="stylesheet" href="{% static 'css/left_bar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/footer.css' %}" />
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            color: #ee10b0;
+        }
+
+        .album-songs {
+            margin-top: 30px;
+        }
+
+        .song-card {
+            background-color: #1f1f1f;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .song-card:hover {
+            background-color: #2a2a2a;
+        }
+
+        .song-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .song-thumbnail {
+            width: 60px;
+            height: 60px;
+            border-radius: 5px;
+            margin-right: 15px;
+        }
+
+        .song-details h3 {
+            margin: 0;
+            font-size: 18px;
+            color: #fff;
+        }
+
+        .song-details p {
+            margin: 0;
+            color: #ccc;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .actions button {
+            background-color: #ee10b0;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .actions button i {
+            margin-right: 5px;
+        }
+
+        .align {
+            padding: 20px;
+        }
+
+        .main-genres {
+            display: flex;
+        }
+
+        .right-bar-album {
+            display: flex;
+            flex-direction: column;
+            width: -webkit-fill-available;
+        }
+    </style>
+</head>
+<body>
+<div class="main-genres">
+    <div class="left-bar-album">
+        {% include "left_bar.html" %}
+    </div>
+    <div class="right-bar-album">
+        <div class="align">
+            {% include "header.html" %}
+        </div>
+
+        <div class="container">
+            <div class="header">
+                <h1>{{ album.title }}</h1>
+                <p>by {{ album.artist }}</p>
+            </div>
+
+            <div class="album-songs">
+                {% if songs %}
+                    {% for song in songs %}
+                        <div class="song-card">
+                            <div class="song-info">
+                                <img src="{{ song.cover_image.url }}" alt="{{ song.title }}" class="song-thumbnail">
+                                <div class="song-details">
+                                    <h3>{{ song.title }}</h3>
+                                    <p>{{ song.duration }}</p>
+                                </div>
+                            </div>
+                            <!-- Updated: Use song.id as the audio element's ID -->
+                            <audio id="audio-{{ song.id }}" src="{{ song.audio_file.url }}" preload="none"></audio>
+                            <div class="actions">
+                                <button onclick="playAudio({{ song.id }}, {{ is_authenticated|yesno:'true,false' }})">
+                                    <i class="fa fa-play"></i> Play
+                                </button>
+                                <button onclick="pauseAudio({{ song.id }})">
+                                    <i class="fa fa-pause"></i> Pause
+                                </button>
+                                {% if is_authenticated %}
+                                    <button class="like-button" id="like-btn-{{ song.id }}"
+                                            {% if song.id in liked_tracks_ids %}class="liked"{% endif %}
+                                            onclick="likeSong({{ song.id }})">
+                                        <i class="fa fa-heart"></i>
+                                        {% if song.id in liked_tracks_ids %}Liked{% else %}Like{% endif %}
+                                    </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No songs available for this album.</p>
+                {% endif %}
+            </div>
+        </div>
+        {% include "footer.html" %}
+    </div>
+    
+</div>
+
+<!--
+Function: playAudio(trackId, isAuthenticated)
+Description: This function is responsible for playing the audio for the given track ID. It also handles authentication and play count incrementation.
+Parameters:
+    trackId (number): The ID of the track to be played.
+    isAuthenticated (boolean): Indicates whether the user is authenticated or not.
+Return: None
+-->
+<script>
+    function playAudio(trackId, isAuthenticated) {
+        console.log('Playing song with ID:', trackId); // Add this for debugging
+
+        const audio = document.getElementById(`audio-${trackId}`);
+
+        // Stop currently playing audio if it exists and is different from the new audio
+        if (currentAudio && currentAudio !== audio) {
+            currentAudio.pause();
+            currentAudio.currentTime = 0; // Reset the audio to the start
+        }
+
+        // Set the new audio as the current audio
+        currentAudio = audio;
+
+        // Play the audio
+        audio.play();
+
+        // Send the request to increment the play count for the track
+        console.log('Sending play count increment request to /increment-play-count/' + trackId + '/');
+        fetch(`/increment-play-count/${trackId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}', // Ensure CSRF token is included
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log('Play count incremented');
+            } else {
+                console.error('Error updating play count');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
+        // Handle authenticated vs. unauthenticated users
+        if (!isAuthenticated) {
+            audio.currentTime = 0; // Start from the beginning
+            audio.play();
+
+            setTimeout(() => {
+                audio.pause();
+
+                const loginPrompt = confirm('Sign in to listen to the full track! Do you want to log in now?');
+                if (loginPrompt) {
+                    window.location.href = '/login/';
+                } else {
+                    currentAudio = null; // Clear the reference to current audio
+                }
+            }, 30000); // Stop playback after 30 seconds
+        }
+    }
+</script>
+
+<!--
+Function: pauseAudio(trackId)
+Description: This function is responsible for pausing the audio for the given track ID.
+Parameters:
+    trackId (number): The ID of the track to be paused.
+Return: None
+-->
+<script>
+    function pauseAudio(trackId) {
+        const audio = document.getElementById(`audio-${trackId}`);
+        if (audio) {
+            audio.pause();
+            if (currentAudio === audio) {
+                currentAudio = null; // Clear currentAudio if paused
+            }
+        }
+    }
+</script>
+
+<!--
+Function: likeSong(trackId)
+Description: This function is responsible for handling the like functionality for the given track ID. It updates the UI and sends a request to the server to update the like status.
+Parameters:
+    trackId (number): The ID of the track to be liked or unliked.
+Return: None
+-->
+<script>
+    function likeSong(trackId) {
+        const likeButton = document.getElementById(`like-btn-${trackId}`);
+
+        // Optimistic UI: Immediately update UI
+        if (likeButton.classList.contains('liked')) {
+            likeButton.classList.remove('liked');
+            likeButton.innerHTML = '<i class="fa fa-heart"></i> Like';
+        } else {
+            likeButton.classList.add('liked');
+            likeButton.innerHTML = '<i class="fa fa-heart"></i> Liked';
+        }
+
+        // Send the request to the server to update the like status
+        fetch(`/like-song/${trackId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}', // Ensure CSRF token is included
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'unliked') {
+                likeButton.classList.remove('liked');
+                likeButton.innerHTML = '<i class="fa fa-heart"></i> Like';
+            } else if (data.status === 'liked') {
+                likeButton.classList.add('liked');
+                likeButton.innerHTML = '<i class="fa fa-heart"></i> Liked';
+            }
+        })
+        .catch(error => {
+            console.error('Error liking song:', error);
+            // If an error occurs, revert the UI change
+            if (likeButton.classList.contains('liked')) {
+                likeButton.classList.remove('liked');
+                likeButton.innerHTML = '<i class="fa fa-heart"></i> Like';
+            } else {
+                likeButton.classList.add('liked');
+                likeButton.innerHTML = '<i class="fa fa-heart"></i> Liked';
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

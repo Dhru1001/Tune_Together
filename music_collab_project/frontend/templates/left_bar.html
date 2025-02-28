@@ -1,0 +1,134 @@
+{% load static %} 
+{% block LeftBar %}
+<div class="left-bar">
+  <div class="logo">
+    <div class="synk">TuneTogether</div>
+  </div>
+  <div class="sticky-frame-1">
+    <div class="menu">Menu</div>
+  </div>
+  <a href="{% url 'main' %}" class="hover-frame">
+    <img class="icon" src="{% static '/icons/home.svg' %}" alt="Home icon" />
+    <div class="hover-text">Home</div>
+  </a>
+
+  <a href="{% url 'discover' %}" class="hover-frame">
+    <img
+      class="icon discover-icon"
+      src="{% static '/icons/discover.svg' %}"
+      alt="Discover icon"
+    />
+    <div class="hover-text">Discover</div>
+  </a>
+
+  <a href="{% url 'view_all_albums' %}" class="hover-frame">
+    <img
+      class="icon albums-icon"
+      src="{% static '/icons/albums.svg' %}"
+      alt="Albums icon"
+    />
+    <div class="hover-text">Albums</div>
+  </a>
+
+  <a href="{% url 'view_all_genres' %}" class="hover-frame">
+    <img
+      class="icon artists-icon"
+      src="{% static '/icons/artists.svg' %}"
+      alt="Artists icon"
+    />
+    <div class="hover-text">Genres</div>
+  </a>
+  <div class="sticky-frame-1">
+    <div class="menu">Library</div>
+  </div>
+  
+  {% if user.is_authenticated %}
+    <a href="{% url 'recently_added' %}">
+      <div class="hover-frame new-hover-frame">
+        <img class="icon new-icon" src="{% static '/icons/recently-added.svg' %}" alt="Recently Added" />
+        <div class="hover-text">Recently Added</div>
+      </div>
+    </a>
+  {% else %}
+    <a href="{% url 'login' %}?next={% url 'recently_added' %}">
+      <div class="hover-frame new-hover-frame">
+        <img class="icon new-icon" src="{% static '/icons/recently-added.svg' %}" alt="Recently Added" />
+        <div class="hover-text">Recently Added</div>
+      </div>
+    </a>
+  {% endif %}
+  
+  <a href="{% url 'most_played' %}">
+    <div class="hover-frame new-hover-frame">
+      <img class="icon new-icon" src="{% static '/icons/most-played.svg' %}" alt="Most played" />
+      <div class="hover-text">Most played</div>
+    </div>
+  </a>
+  
+  <div class="sticky-frame-1">
+    <div class="menu">Playlist and favorite</div>
+  </div>
+  {% if user.is_authenticated %}
+  <!-- These are links visible when the user is logged in -->
+  <a href="{% url 'liked_songs' %}" style="text-decoration: none;">
+    <div class="hover-frame new-hover-frame">
+      <img class="icon new-icon" src="{% static '/icons/your-favorites.svg' %}" alt="Your favorites" />
+      <div class="hover-text">Your favorites</div>
+    </div>
+  </a>
+  <a href="{% url 'your_playlists' %}">
+    <div class="hover-frame new-hover-frame">
+      <img class="icon new-icon" src="{% static '/icons/your-playlist.svg' %}" alt="Your playlist" />
+      <div class="hover-text">Your playlist</div>
+    </div>
+  </a>
+  <a href="{% url 'add_playlist' %}">
+    <div class="hover-frame new-hover-frame">
+      <img class="icon new-icon" src="{% static '/icons/add-playlist.svg' %}" alt="Add Playlist" />
+      <div class="hover-text">Add Playlist</div>
+    </div>
+  </a>
+{% else %}
+  <!-- These are links visible when the user is not logged in -->
+  <a href="{% url 'login' %}?next={% url 'liked_songs' %}">
+    <div class="hover-frame new-hover-frame">
+      <img class="icon new-icon" src="{% static '/icons/your-favorites.svg' %}" alt="Your favorites" />
+      <div class="hover-text">Your favorites</div>
+    </div>
+  </a>
+  <a href="{% url 'login' %}?next={% url 'your_playlists' %}">
+    <div class="hover-frame new-hover-frame">
+      <img class="icon new-icon" src="{% static '/icons/your-playlist.svg' %}" alt="Your playlist" />
+      <div class="hover-text">Your playlist</div>
+    </div>
+  </a>
+  <a href="{% url 'login' %}?next={% url 'add_playlist' %}">
+    <div class="hover-frame new-hover-frame">
+      <img class="icon new-icon" src="{% static '/icons/add-playlist.svg' %}" alt="Add Playlist" />
+      <div class="hover-text">Add Playlist</div>
+    </div>
+  </a>
+{% endif %}
+
+
+  <div class="sticky-frame-1">
+    <div class="menu">General</div>
+  </div>
+  <div class="hover-frame new2-hover-frame">
+    <img
+      class="icon new2-hover-icon"
+      src="{% static '/icons/settings.svg' %}"
+      alt="Settings"
+    />
+    <div class="hover-text">Settings</div>
+  </div>
+  <div class="hover-frame new2-hover-frame">
+    <img
+      class="icon new2-hover-icon"
+      src="{% static '/icons/logout.svg' %}"
+      alt="Logout"
+    />
+    <a href="{% url 'logout' %}" class="hover-text">Logout</a>
+  </div>
+</div>
+{% endblock LeftBar %}

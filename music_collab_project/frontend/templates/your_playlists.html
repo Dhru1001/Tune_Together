@@ -1,0 +1,92 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Playlists</title>
+    <link rel="stylesheet" href="{% static 'css/header.css' %}">
+    <link rel="stylesheet" href="{% static 'css/footer.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ee10b0;
+        }
+
+        .playlist {
+            background-color: #1f1f1f;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .playlist h2 {
+            margin: 0;
+            font-size: 20px;
+            color: #ee10b0;
+        }
+
+        .playlist p {
+            font-size: 14px;
+            color: #bbb;
+        }
+
+        .navigation-links {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .navigation-links a {
+            color: #ee10b0;
+            font-size: 16px;
+            text-decoration: none;
+            margin: 0 10px;
+            padding: 10px;
+            border: 2px solid #ee10b0;
+            border-radius: 5px;
+        }
+
+        .navigation-links a:hover {
+            background-color: #ee10b0;
+            color: #fff;
+        }
+        .align{
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="align">
+    {% include "header.html" %}
+    </div>
+    <div class="container">
+        <h1>Your Playlists</h1>
+        {% for playlist in playlists %}
+        <div class="playlist">
+            <h2><a href="{% url 'playlist_detail' playlist.id %}" style="color: #ee10b0; text-decoration: none;">{{ playlist.name }}</a></h2>
+
+            <p>{{ playlist.description }}</p>
+            <p>Tracks: {{ playlist.tracks.count }}</p>
+        </div>
+        {% empty %}
+        <p style="text-align: center; color: #888;">You have no playlists yet. <a href="{% url 'add_playlist' %}" style="color: #ee10b0;">Create one!</a></p>
+        {% endfor %}
+    </div>
+    {% include "footer.html" %}
+</body>
+</html>

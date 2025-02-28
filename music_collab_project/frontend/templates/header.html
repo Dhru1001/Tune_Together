@@ -1,0 +1,59 @@
+{% load static %}
+<div class="header">
+    <div class="header-frame-1">
+      <!-- Search bar form -->
+      <div class="search-bar">
+        <div class="header-frame-2">
+            <form method="GET" action="{% url 'search_view' %}">
+                <img class="search" src="{% static 'icons/search.svg' %}" alt="Search icon" />
+                <div class="search-box">
+                    <input
+                        type="text"
+                        name="query"
+                        class="search-for-musics-artists"
+                        placeholder="Search For Musics, Artists, ..."
+                        style="border: none; outline: none; background: transparent;"
+                        value="{{ request.GET.query }}"  
+                    />
+                </div>
+            </form>
+        </div>
+    </div>
+    
+
+      <!-- Navigation links -->
+      <div class="titles">
+        <div class="titles-container">
+          <a href="{% url 'main' %}" class="nav-link">About Us</a>
+          <a href="{% url 'main' %}" class="nav-link">Contact</a>
+          <a href="{% url 'main' %}" class="nav-link">Tutorial</a>
+          {% if user.is_authenticated and user.profile.role == "musician" %}
+              <a href="{% url 'musician_dashboard' %}" class="nav-link">Dashboard</a>
+          {% endif %}
+
+        </div>
+      </div>
+
+      <!-- Login and Sign Up buttons -->
+      <div class="login-area">
+        {% if user.is_authenticated %}
+            <!-- Show username and logout button if the user is logged in -->
+            <div class="user-info">
+                <span>Welcome, {{ user.username }}!</span>
+            </div>
+            <div class="button">
+                <a href="{% url 'logout' %}" class="button2">Logout</a>
+            </div>
+        {% else %}
+            <!-- Show login and sign-up buttons if the user is not logged in -->
+            <div class="button">
+                <a href="{% url 'login' %}" class="button2">Login</a>
+            </div>
+            <div class="button3">
+                <a href="{% url 'signup' %}" class="button4">Sign Up</a>
+            </div>
+        {% endif %}
+    </div>
+    
+    </div>
+  </div>

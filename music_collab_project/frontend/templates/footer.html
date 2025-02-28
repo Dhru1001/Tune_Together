@@ -1,0 +1,57 @@
+{% load static %}
+
+{% block footer %}
+
+<footer class="footer">
+    <div class="footer-container">
+        <div class="about-section">
+            <h3>About</h3>
+            <p>
+                Its foundation is based on collaboration for small scaled artists while providing the <span class="highlight">gist </span>of real life music production
+                in a virtual domain.It also provides a range of audience to enjoy and explore the <a href="#" class="link">artists </a>leading to their arts promotion.
+            </p>
+        </div>
+        <div class="links-section">
+            <div class="column">
+                <h3>TuneTogether</h3>
+                <ul>
+                    <li><a href="#">Songs</a></li>
+                    <li><a href="#">Radio</a></li>
+                    <li><a href="#">Podcast</a></li>
+                </ul>
+            </div>
+            <div class="column">
+                <h3>Access</h3>
+                <ul>
+                    <li><a href="{% url 'preference_selection' %}">Go to Preferences</a></li>
+                    <li><a href="#">Explore</a></li>
+                    <li><a href="#">Artists</a></li>
+                    <li><a href="#">Playlists</a></li>
+                    <li><a href="#">Albums</a></li>
+                    <li><a href="#">Trending</a></li>
+                </ul>
+            </div>
+            <div class="column">
+                <h3>Contact</h3>
+                <ul>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Policy</a></li>
+                    <li><a href="#">Social Media</a></li>
+                    <li><a href="#">Support</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="social-section">
+            <h3>TuneTogether</h3>
+            <div class="social-icons">
+                <a href="#"><img src="{% static 'img/facebook-icon.png' %}" alt="Facebook"></a>
+                <a href="#"><img src="{% static 'img/instagram-icon.png' %}" alt="Instagram"></a>
+                <a href="#"><img src="{% static 'img/twitter-icon.png' %}" alt="Twitter"></a>
+                <a href="#"><img src="{% static 'img/phone-icon.png' %}" alt="Phone"></a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+{% endblock footer %}
+

@@ -1,0 +1,272 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Track</title>
+    <link rel="stylesheet" href="{% static 'css/header.css' %}" />
+    <style>
+        body {
+            background: linear-gradient(90.07deg, rgb(11, 3, 9) 0%, rgba(1, 10, 15, 0.92) 100%);
+            color: white;
+            font-family: 'Vazirmatn', sans-serif;
+            padding: 2rem;
+        }
+        .form-container {
+            background: #000;
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 600px;
+            margin: auto;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .form-align {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+            width: 100%; /* Ensure full width for form groups */
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 8px;
+            border: 1px solid #333;
+            background: #222;
+            color: white;
+        }
+        .form-group input::placeholder, .form-group select {
+            color: #aaa;
+        }
+        .submit-btn {
+            background: #ee10b0;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.3s;
+        }
+        .submit-btn:hover {
+            background: #cc0099;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 1rem;
+            color: #ee10b0;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Upload a New Track</h1>
+        <div class="form-align">
+            <form method="POST" enctype="multipart/form-data" style="display: flex; flex-direction: column; width: 80%;">
+                {% csrf_token %}
+                
+                <!-- Artist Dropdown -->
+                <div class="form-group">
+                    <label for="artist">Select Artist</label>
+                    <select name="artist" id="artist" required>
+                        <option value="">Select an artist</option>
+                        {% for artist in artists %}
+                            <option value="{{ artist.id }}">{{ artist.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <!-- Add New Artist Button -->
+                <button type="button" class="submit-btn" onclick="showAddArtistForm()">+ Add New Artist</button>
+                <br>
+                <!-- Track Title -->
+                <div class="form-group">
+                    <label for="title">Track Title</label>
+                    <input type="text" name="title" id="title" placeholder="Enter track title" required>
+                </div>
+
+                <!-- Release Date -->
+                <div class="form-group">
+                    <label for="release_date">Release Date</label>
+                    <input type="date" name="release_date" id="release_date" required>
+                </div>
+
+                <!-- Album Dropdown -->
+                <div class="form-group">
+                    <label for="album">Select Album</label>
+                    <select name="album" id="album" required>
+                        <option value="">Select an album</option>
+                        {% for album in albums %}  <!-- Correct variable name -->
+                            <option value="{{ album.id }}">{{ album.title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Add New Album Button -->
+                <button type="button" class="submit-btn" onclick="showAddAlbumForm()">+ Add New Album</button>
+                <br>
+                <!-- Duration -->
+                <div class="form-group">
+                    <label for="duration">Duration</label>
+                    <input type="text" name="duration" id="duration" placeholder="Enter duration (e.g., 3:30)" required>
+                </div>
+
+                <!-- Cover Image -->
+                <div class="form-group">
+                    <label for="cover_image">Cover Image</label>
+                    <input type="file" name="cover_image" id="cover_image" accept="image/*" required>
+                </div>
+
+                <!-- Audio File -->
+                <div class="form-group">
+                    <label for="audio_file">Audio File</label>
+                    <input type="file" name="audio_file" id="audio_file" accept="audio/*" required>
+                </div>
+
+                <!-- Genre Dropdown and Add Button -->
+                <div class="form-group">
+                    <label for="genre">Genre</label>
+                    <select name="genre" id="genre" required>
+                        <option value="">Select a genre</option>
+                        {% for genre in genres %}
+                            <option value="{{ genre.id }}">{{ genre.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Add New Genre Button -->
+                <button type="button" class="submit-btn" onclick="showAddGenreForm()">+ Add New Genre</button>
+                <br>
+
+                <button type="submit" class="submit-btn">Upload Track</button>
+            </form>
+        </div>
+        <a href="{% url 'musician_dashboard' %}" class="back-link">Back to Dashboard</a>
+    </div>
+
+<!-- Add Artist Modal -->
+<div id="add-artist-modal" style="display:none; background: rgba(0,0,0,0.8); position: fixed; top: 0; left: 0; width: 100%; height: 100%; justify-content: center; align-items: center;">
+    <div style="background: linear-gradient(115deg, rgb(43 2 33) 0%, rgba(1, 10, 15, 0.92) 100%); padding: 2rem; border-radius: 16px; max-width: 400px; margin: auto;">
+        <h2>Add New Artist</h2>
+        <form method="POST" action="{% url 'add_artist' %}" enctype="multipart/form-data" style="display: flex; flex-direction: column; width: 80%;">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="new_artist_name">Artist Name</label>
+                <input type="text" name="new_artist_name" id="new_artist_name" placeholder="Enter artist name" required>
+            </div>
+            <div class="form-group">
+                <label for="new_artist_image">Artist Image</label>
+                <input type="file" name="new_artist_image" id="new_artist_image" accept="image/*" required>
+            </div>
+            <div class="form-group">
+                <label for="new_artist_genre">Genre</label>
+                <input type="text" name="new_artist_genre" id="new_artist_genre" placeholder="Enter genre" value="Unknown">
+            </div>
+            <div class="form-group">
+                <label for="new_artist_profile_url">Profile URL</label>
+                <input type="url" name="new_artist_profile_url" id="new_artist_profile_url" placeholder="Enter profile URL" value="#">
+            </div>
+            <button type="submit" class="submit-btn">Add Artist</button>
+            <br>
+            <button type="button" class="submit-btn" onclick="closeAddArtistForm()">Cancel</button>
+        </form>
+    </div>
+</div>
+
+<!-- Add Album Modal -->
+<div id="add-album-modal" style="display:none; background: rgba(0,0,0,0.8); position: fixed; top: 0; left: 0; width: 100%; height: 100%; justify-content: center; align-items: center;">
+    <div style="background: linear-gradient(115deg, rgb(43 2 33) 0%, rgba(1, 10, 15, 0.92) 100%); padding: 2rem; border-radius: 16px; max-width: 400px; margin: auto;">
+        <h2>Add New Album</h2>
+        <form method="POST" action="{% url 'add_album' %}" enctype="multipart/form-data" style="display: flex; flex-direction: column; width: 80%;">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="new_album_title">Album Title</label>
+                <input type="text" name="new_album_title" id="new_album_title" placeholder="Enter album title" required>
+            </div>
+            <div class="form-group">
+                <label for="new_album_artist">Artist</label>
+                <input type="text" name="new_album_artist" id="new_album_artist" placeholder="Enter artist name" required>
+            </div>
+            <div class="form-group">
+                <label for="new_album_cover_image">Cover Image</label>
+                <input type="file" name="new_album_cover_image" id="new_album_cover_image" accept="image/*" required>
+            </div>
+            <div class="form-group">
+                <label for="new_album_release_date">Release Date</label>
+                <input type="date" name="new_album_release_date" id="new_album_release_date" required>
+            </div>
+            <button type="submit" class="submit-btn">Add Album</button>
+            <br>
+            <button type="button" class="submit-btn" onclick="closeAddAlbumForm()">Cancel</button>
+        </form>
+    </div>
+</div>
+
+<!-- Add Genre Modal -->
+<div id="add-genre-modal" style="display:none; background: rgba(0,0,0,0.8); position: fixed; top: 0; left: 0; width: 100%; height: 100%; justify-content: center; align-items: center;">
+    <div style="background: linear-gradient(115deg, rgb(43 2 33) 0%, rgba(1, 10, 15, 0.92) 100%); padding: 2rem; border-radius: 16px; max-width: 400px; margin: auto;">
+        <h2>Add New Genre</h2>
+        <form method="POST" action="{% url 'add_genre' %}" enctype="multipart/form-data" style="display: flex; flex-direction: column; width: 80%;">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="new_genre_name">Genre Name</label>
+                <input type="text" name="new_genre_name" id="new_genre_name" placeholder="Enter genre name" required>
+            </div>
+            <div class="form-group">
+                <label for="new_genre_description">Description</label>
+                <textarea name="new_genre_description" id="new_genre_description" rows="3" placeholder="Enter genre description" style="background: linear-gradient(115deg, rgb(43 2 33) 0%, rgba(1, 10, 15, 0.92) 100%); color: white;"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="new_genre_background_image">Background Image</label>
+                <input type="file" name="new_genre_background_image" id="new_genre_background_image" accept="image/*">
+            </div>
+            <button type="submit" class="submit-btn">Add Genre</button>
+            <br>
+            <button type="button" class="submit-btn" onclick="closeAddGenreForm()">Cancel</button>
+        </form>
+    </div>
+</div>
+    <script>
+        // Add Genre Modal Functions
+        function showAddGenreForm() {
+            document.getElementById('add-genre-modal').style.display = 'flex';
+        }
+
+        function closeAddGenreForm() {
+            document.getElementById('add-genre-modal').style.display = 'none';
+        }
+        function showAddArtistForm() {
+            document.getElementById('add-artist-modal').style.display = 'flex';
+        }
+
+        function closeAddArtistForm() {
+            document.getElementById('add-artist-modal').style.display = 'none';
+        }
+
+        function showAddAlbumForm() {
+            document.getElementById('add-album-modal').style.display = 'flex';
+        }
+
+        function closeAddAlbumForm() {
+            document.getElementById('add-album-modal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

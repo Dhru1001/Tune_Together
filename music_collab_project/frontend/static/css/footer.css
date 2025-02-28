@@ -1,0 +1,96 @@
+.footer {
+
+    color: #fff;
+    padding: 40px;
+    font-family: 'Arial', sans-serif;
+}
+
+.footer-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.about-section {
+    flex: 1 1 30%;
+    max-width: 400px;
+}
+
+.about-section h3 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.about-section p {
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.highlight {
+    color: #ee10b0;
+    font-weight: bold;
+}
+
+.link {
+    color: #00f;
+    text-decoration: none;
+}
+
+.links-section {
+    display: flex;
+    flex: 1 1 40%;
+    gap: 20px;
+}
+
+.column {
+    flex: 1;
+}
+
+.column h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.column ul {
+    list-style: none;
+    padding: 0;
+}
+
+.column ul li {
+    margin-bottom: 8px;
+}
+
+.column ul li a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 14px;
+}
+
+.column ul li a:hover {
+    text-decoration: underline;
+}
+
+.social-section {
+    flex: 1 1 20%;
+    text-align: center;
+}
+
+.social-section h3 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.social-icons a img {
+    width: 24px;
+    height: 24px;
+}

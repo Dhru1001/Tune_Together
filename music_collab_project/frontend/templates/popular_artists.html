@@ -1,0 +1,42 @@
+{% load static %}
+{% block popular_artists %}
+<div class="popular-artists">
+    <div class="frame-168">
+        <div class="popular-artists-title">
+            <span><span class="title-highlight">Popular</span> <span class="title-main">Artists</span></span>
+        </div>
+    </div>
+    <div class="frame-169">
+        <div class="artists-container">
+            {% for artist in artists %}
+            <div class="artist-card" onclick="location.href='{% url 'artist_tracks' artist.name %}'">
+                <div 
+                    class="artist-image" 
+                    style="background-image: url('{{ artist.image.url }}');">
+                </div>
+                <div class="artist-name">{{ artist.name }}</div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="view-all-container">
+            {% if user.is_authenticated %}
+            <!-- If user is logged in, allow access -->
+            <div onclick="location.href='{% url 'view_all_artists' %}'">
+                <div class="plus-icon-container">
+                    <img class="icon-plus" src="{% static 'icons/plus.svg' %}" alt="Plus icon" />
+                </div>
+                <div class="view-all-text">View All</div>
+            </div>
+            {% else %}
+            <!-- If user is not logged in, redirect to login -->
+            <div onclick="location.href='{% url 'view_all_artists' %}'">
+                <div class="plus-icon-container">
+                    <img class="icon-plus" src="{% static 'icons/plus.svg' %}" alt="Plus icon" />
+                </div>
+                <div class="view-all-text">View All</div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock popular_artists %}

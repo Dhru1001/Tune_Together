@@ -1,0 +1,135 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/discover.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/header.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/left_bar.css' %}" />
+
+
+
+</head>
+<body>
+
+
+    {% comment %} <header>
+        <div class="logo">TuneTogether</div>
+        <nav>
+            <a href="">Home</a>
+            <a href="">Info</a>
+            <a href="">Contact</a>
+        </nav>
+    </header> {% endcomment %}
+    <div class="align" >
+        {% include "header.html" %}
+    </div>
+
+    <div class="carousel">
+        <div class="list">
+            <div class="item">
+                <img src="{% static '/img/Taylor Swift.png' %}"alt="taylor-swifi"/>
+                <div class="introduce">
+                    <div class="title">Taylor-swift</div>
+                    <div class="topic">Global Music Icon</div>
+                    <div class="des">
+                        <!-- 20 lorem -->
+                        Taylor Swift is an American singer-songwriter known for her storytelling and genre-crossing music. She began her career in country music with hits like "Love Story" and "You Belong with Me," before transitioning into pop with chart-toppers like "Shake It Off," "Blank Space," and "Cardigan." Swift's lyrical prowess and ability to reinvent herself have made her one of the most influential artists in the world.
+                    </div>
+                    <a href="{% url 'artist_tracks' 'Taylor Swift' %}" class="seeMore">SEE MORE &#8599;</a>
+                </div>
+            </div>
+
+            <div class="item">
+                <img src="{% static '/img/Justin-Bieber.png' %}"alt="Justin-Bieber"/>
+                <div class="introduce">
+                    <div class="title">Justin Bieber</div>
+                    <div class="topic">Music Legend</div>
+                    <div class="des">
+                        <!-- 20 lorem -->
+                        Justin Bieber is a Canadian singer known for his genre-melding musicianship and global influence. Rising to fame with his debut album "My World," Bieber has since released numerous chart-topping hits like "Baby," "Sorry," and "Peaches."
+                    </div>
+                    <a href="{% url 'artist_tracks' 'Justin Bieber' %}" class="seeMore">SEE MORE &#8599;</a>
+
+                </div>
+                
+            </div>
+
+            <div class="item">
+                <img src="{% static '/img/weeknd.png' %}"alt="Weeknd"/>
+                <div class="introduce">
+                    <div class="title">Weeknd</div>
+                    <div class="topic">R&B Innovator</div>
+                    <div class="des">
+                        <!-- 20 lorem -->
+                        The Weeknd, born Abel Tesfaye, is a Canadian singer-songwriter known for his brooding, atmospheric sound and genre-bending music. His hits like "Blinding Lights," "Starboy," and "Can't Feel My Face" have earned him international acclaim and multiple awards.
+                    </div>
+                    <a href="{% url 'artist_tracks' 'Weeknd' %}" class="seeMore">SEE MORE &#8599;</a>
+                </div>
+                
+            </div>
+
+            <div class="item">
+                <img src="{% static '/img/XXXtentation.png' %}"alt="xxxtentation"/>
+                <div class="introduce">
+                    <div class="title">XXXTentacion</div>
+                    <div class="topic">Rap Rebel</div>
+                    <div class="des">
+                        <!-- 20 lorem -->
+                        XXXTentacion, born Jahseh Onfroy, was an American rapper and singer known for his emotional, genre-blending music. His songs like "SAD!," "Jocelyn Flores," and "Moonlight" touched on themes of mental health and personal struggles, leaving a lasting impact on the music world.
+                    </div>
+                    <a href="{% url 'artist_tracks' 'XXXtentation' %}" class="seeMore">SEE MORE &#8599;</a>
+                </div>
+            </div>
+
+            <div class="item">
+                <img src="{% static '/img/Shawn Mendes.png' %}"alt="shawn-mendes"/>
+                <div class="introduce">
+                    <div class="title">Shawn-Mendes</div>
+                    <div class="topic">Global Sensation</div>
+                    <div class="des">
+                        <!-- 20 lorem -->
+                        Shawn Mendes is a Canadian singer-songwriter known for his heartfelt ballads and acoustic pop sound. He gained widespread recognition with songs like "Stitches," "Treat You Better," and "Señorita," becoming a global pop icon.
+                    </div>
+                    <a href="{% url 'artist_tracks' 'Shawn Mendes' %}" class="seeMore">SEE MORE &#8599;</a>
+                </div>
+            </div>
+
+            <div class="item">
+                <img src="{% static '/img/Eminem.jpg' %}" alt="eminem"/>
+                <div class="introduce">
+                    <div class="title">Eminem</div>
+                    <div class="topic">Rap Icon</div>
+                    <div class="des">
+                        Eminem, also known as Marshall Mathers, is an American rapper, songwriter, and record producer. Known for his rapid-fire delivery and controversial lyrics, he gained fame with hits like "Lose Yourself," "Stan," and "Without Me." Eminem has been one of the most influential and successful artists in the rap genre, earning multiple Grammy Awards and international acclaim.
+                    </div>
+                    <a href="{% url 'artist_tracks' 'Eminem' %}" class="seeMore">SEE MORE &#8599;</a>
+                </div>
+            </div>
+            
+            <div class="item">
+                <img src="{% static '/img/Billie Eilish.png' %}"alt="billie-eilish"/>
+                <div class="introduce">
+                    <div class="title">Billie-Ellish</div>
+                    <div class="topic">Music Phenomenon</div>
+                    <div class="des">
+                        <!-- 20 lorem -->
+                        Billie Eilish is an American singer-songwriter who rose to prominence with her dark, introspective style and unique sound. Her debut album "When We All Fall Asleep, Where Do We Go?" spawned hits like "Bad Guy" and "Bury a Friend," earning her multiple Grammy Awards.
+                    </div>
+                    <a href="{% url 'artist_tracks' 'Billie Eilish' %}" class="seeMore">SEE MORE &#8599;</a>
+                </div>
+            </div>
+        </div>
+        <div class="arrows">
+            <button id="prev"><</button>
+            <button id="next">></button>
+            <button id="back">See All  &#8599</button>
+        </div>
+    </div>
+
+
+    <script src="{% static 'js/app.js' %}"></script>
+</body>
+</html>

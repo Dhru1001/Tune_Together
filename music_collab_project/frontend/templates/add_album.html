@@ -1,0 +1,89 @@
+<!-- add_artist.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Artist</title>
+    <link rel="stylesheet" href="{% static 'css/header.css' %}" />
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: white;
+            font-family: 'Vazirmatn', sans-serif;
+            padding: 2rem;
+        }
+        .form-container {
+            background: #000;
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 400px;
+            margin: auto;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 8px;
+            border: 1px solid #333;
+            background: #222;
+            color: white;
+        }
+        .form-group input::placeholder {
+            color: #aaa;
+        }
+        .submit-btn {
+            background: #ee10b0;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.3s;
+        }
+        .submit-btn:hover {
+            background: #cc0099;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Add New Artist</h1>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="new_album_title">Album Title</label>
+                <input type="text" name="new_album_title" id="new_album_title" required>
+            </div>
+            <div class="form-group">
+                <label for="new_album_artist">Artist</label>
+                <input type="text" name="new_album_artist" id="new_album_artist" required>
+            </div>
+            <div class="form-group">
+                <label for="new_album_cover_image">Cover Image</label>
+                <input type="file" name="new_album_cover_image" id="new_album_cover_image" accept="image/*" required>
+            </div>
+            <div class="form-group">
+                <label for="new_album_release_date">Release Date</label>
+                <input type="date" name="new_album_release_date" id="new_album_release_date" required>
+            </div>
+            <button type="submit" class="submit-btn">Add Album</button>
+        </form>
+        <a href="{% url 'upload_track' %}" style="color: #ee10b0; display: block; text-align: center; margin-top: 1rem;">Back to Upload</a>
+    </div>
+</body>
+</html> 

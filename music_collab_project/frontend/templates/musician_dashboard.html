@@ -1,0 +1,293 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Musician Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/header.css' %}" />
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap JS (required for dismissible alerts) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+        /* Base Styles */
+        body {
+            background: linear-gradient(90.07deg, rgb(11, 3, 9) 0%, rgba(1, 10, 15, 0.92) 100%);
+            font-family: 'Vazirmatn', sans-serif;
+            color: white;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        /* Dashboard Layout */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: #000;
+            border-radius: 24px;
+            padding: 2rem;
+            height: fit-content;
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .nav-item {
+            color: white;
+            text-decoration: none;
+            padding: 1rem;
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+
+        .nav-item:hover {
+            background: #ee10b0;
+        }
+
+        /* Main Content */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* Header */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .upload-btn {
+            background: #ee10b0;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .upload-btn:hover {
+            background: #cc0099;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            background: #000;
+            padding: 1.5rem;
+            border-radius: 16px;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            color: #ee10b0;
+            margin: 0.5rem 0;
+        }
+
+        /* Recent Uploads */
+        .uploads-section {
+            background: #000;
+            border-radius: 16px;
+            padding: 2rem;
+        }
+
+        .upload-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #333;
+        }
+
+        /* Collaboration Section */
+        .collab-card {
+            background: #000;
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .collab-tag {
+            background: #ee10b0;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin: 0.5rem 0;
+        }
+
+        .align {
+            padding: 20px;
+        }
+
+        /* Message Styles */
+        .messages {
+            list-style-type: none;
+            padding: 0;
+            margin: 0 0 1rem 0;
+        }
+
+        .messages li {
+            background: #ee10b0;
+            color: #000;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+        .image-align{
+            display: flex;
+        }
+        .card-content-align{
+            display: flex;
+            flex-direction: column;
+            padding: 50px;
+            align-self: center;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+
+            .sidebar {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="align">
+        {% include "header.html" %}
+    </div>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2>Music Studio</h2>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item">Dashboard</a>
+                <a href="#" class="nav-item">My Tracks</a>
+                <a href="#" class="nav-item">Analytics</a>
+                <a href="#" class="nav-item">Collaborations</a>
+                <a href="#" class="nav-item">Settings</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Message Display -->
+            {% if messages %}
+                <div class="container mt-3">
+                    {% for message in messages %}
+                        <div class="alert alert-{% if message.tags %}{{ message.tags }}{% else %}info{% endif %} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <!-- Header -->
+            <header class="dashboard-header">
+                <h1>Welcome Back, {{ request.user.username }}!</h1>
+                <button class="upload-btn" onclick="window.location.href='{% url 'upload_track' %}'">+ New Upload</button>
+            </header>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Listens</h3>
+                    <div class="stat-value">{{ total_listens }}</div>
+                    <span>+12% from last month</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Followers</h3>
+                    {% comment %} <div class="stat-value">{{ followers_count }}</div> {% endcomment %}
+                    <span>+32 new today</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Revenue</h3>
+                    <div class="stat-value">${{ revenue }}</div>
+                    <span>Available balance</span>
+                </div>
+            </div>
+
+            <!-- Recent Uploads -->
+            <section class="uploads-section">
+                <h2>Recent Uploads</h2>
+                {% for track in recent_uploads %}
+                <div class="upload-item">
+                    <div>
+                        <div class="image-align">
+                            {% if track.cover_image %}
+                                <img src="{{ track.cover_image.url }}" alt="{{ track.title }} Cover">
+                            {% else %}
+                                <img src="{% static 'default_cover.jpg' %}" alt="Default Cover">
+                            {% endif %}
+                            <div class="card-content-align">
+                                <h3>{{ track.title }}</h3>
+                                <p>{{ track.genre.name }} • {{ track.created_at|date:"F j, Y" }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-value">{{ track.play_count }}</div>
+                </div>
+                {% endfor %}
+            </section>
+
+            <!-- Collaborations -->
+            <section>
+                <h2>Collaboration Requests</h2>
+                {% for request in collaboration_requests %}
+                <div class="collab-card">
+                    <div class="collab-tag">{{ request.type }}</div>
+                    <h3>{{ request.title }}</h3>
+                    <p>{{ request.description }}</p>
+                    <button class="upload-btn" style="margin-top: 1rem;">View Details</button>
+                </div>
+                {% empty %}
+                <p>No collaboration requests at this time.</p>
+                {% endfor %}
+            </section>
+        </main>
+    </div>
+
+    <!-- Demo Calendar Widget -->
+    <div style="max-width: 1400px; margin: 2rem auto; background: #000; border-radius: 16px; padding: 2rem;">
+        <h2>Upcoming Events</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+            <div style="background: #ee10b0; padding: 1rem; border-radius: 12px;">
+                <h3>Album Release</h3>
+                <p>March 15, 2024</p>
+            </div>
+            <div style="background: #333; padding: 1rem; border-radius: 12px;">
+                <h3>Live Session</h3>
+                <p>March 22, 2024</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

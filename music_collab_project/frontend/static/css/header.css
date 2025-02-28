@@ -1,0 +1,176 @@
+.header,
+.header * {
+    box-sizing: border-box;
+}
+
+.header {
+    position: relative;
+    width: -webkit-fill-available;
+    padding: 0px 0px 20px 0px;
+}
+
+.header-frame-1 {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    align-items: center;
+    justify-content: flex-start;
+    align-self: stretch;
+    flex-shrink: 0;
+    position: relative;
+    
+}
+
+.search-bar {
+    background: #1f1f1f;
+    border-radius: 10px;
+    padding: 6px 8px 6px 8px;
+    display: flex;
+    flex-direction: row;
+    gap: 3px;
+    align-items: center;
+    justify-content: flex-start;
+    flex: 1;
+    height: 38px;
+    position: relative;
+}
+
+.header-frame-2 {
+    display: flex;
+    flex-direction: row;
+    gap: 3px;
+    align-items: center;
+    justify-content: flex-start;
+    flex: 1;
+    position: relative;
+}
+
+
+.search {
+    flex-shrink: 0;
+    width: 25px;
+    height: 25px;
+    position: relative;
+    overflow: visible;
+}
+
+.search-box {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+    
+}
+
+.search-for-musics-artists {
+    color: #ee10b0;
+    text-align: left;
+    font-family: var(--text-small-font-family, 'Vazirmatn-Light', sans-serif);
+    font-size: var(--text-small-font-size, 12px);
+    font-weight: var(--text-small-font-weight, 300);
+    opacity: 0.6;
+    position: relative;
+    font-size: medium;
+    
+   
+
+}
+form {
+    display: flex;
+}
+
+
+.titles {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    position: relative;
+}
+
+.titles-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    align-self: stretch;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.nav-link {
+    color: #ffffff;
+    text-align: center;
+    font-family: var(--h4-font-family, 'Vazirmatn-Medium', sans-serif);
+    font-size: var(--h4-font-size, 16px);
+    font-weight: var(--h4-font-weight, 500);
+    position: relative;
+    flex: 1;
+    text-decoration: none; /* Ensure links have no underline */
+}
+
+.nav-link:hover {
+    color: #ee10b0;
+}
+.user-info{
+    color: #ffffff;
+}
+
+.login-area {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    align-items: center;
+    justify-content: flex-start;
+    flex: 1;
+    position: relative;
+}
+
+/* Style for both buttons to look like the current Login button */
+.button, .button3 {
+    border-radius: 4px;
+    border-style: solid;
+    border-color: var(--normal, #ee10b0);
+    border-width: 1px;
+    padding: 6px 16px;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    height: 36px;
+    position: relative;
+    background: transparent; /* Transparent background */
+    cursor: pointer; /* Makes it look clickable */
+    transition: background-color 0.3s, color 0.3s; /* Smooth transition */
+}
+
+.button2, .button4 {
+    color: var(--normal, #ee10b0); /* Text color matching Login */
+    text-align: center;
+    font-family: 'Vazirmatn-Light', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    position: relative;
+    transition: color 0.3s; /* Ensures smooth color transition */
+    text-decoration: none;
+
+}
+
+/* Hover effect to make both buttons look like the current Sign Up button */
+.button:hover, .button3:hover {
+    background: var(--normal, #ee10b0); /* Pink background */
+    color: #ffffff; /* White text on hover */
+}
+
+.button:hover .button2, .button3:hover .button4 {
+    color: #ffffff; /* White text inside the button on hover */
+}
+
+ 

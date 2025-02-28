@@ -1,0 +1,349 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ genre.name }} - Genre Details</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/header.css' %}">
+    <link rel="stylesheet" href="{% static 'css/footer.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+
+        .genre-detail-container {
+            max-width: 900px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .genre-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .genre-header h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+            color: #ee10b0;
+        }
+
+        .genre-description {
+            font-size: 18px;
+            color: #ccc;
+            line-height: 1.5;
+            margin-top: 10px;
+        }
+
+        .genre-layout {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+        }
+
+        .genre-background {
+            height: 250px;
+            width: 300px;
+            background-color: #2a2a2a;
+            background-position: center;
+            background-size: cover;
+            border-radius: 8px;
+        }
+
+        .genre-description-container {
+            max-width: 500px;
+        }
+
+        .genre-tracks {
+            margin-top: 30px;
+        }
+
+        .genre-tracks h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #ee10b0;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            color: #ccc;
+            border-collapse: collapse;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .table th, .table td {
+            padding: 10px;
+            text-align: left;
+        }
+        .table th {
+            background-color: #1f1f1f;
+        }
+        .table tr:nth-child(even) {
+            background-color: #2a2a2a;
+        }
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+        .actions button {
+            background-color: #ee10b0;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .actions button i {
+            margin-right: 5px;
+        }
+        .align{
+            padding: 20px;
+        }
+        .play-pause-btn {
+            background-color: #ee10b0;
+            color: white;
+            padding: 5px 15px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .like-btn, .dislike-btn {
+            background-color: #444;
+            color: #ccc;
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        .liked {
+            color: #ff3366;
+        }
+
+        .back-to-genres {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .back-to-genres-link {
+            color: #ee10b0;
+            font-size: 18px;
+            text-decoration: none;
+        }
+
+        .back-to-genres-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="align">
+    {% include "header.html" %}
+    </div>
+    <div class="genre-detail-container">
+        <div class="genre-header">
+            <h1>{{ genre.name }} Genre</h1>
+        </div>
+
+        <div class="genre-layout">
+            <div class="genre-background" style="background: url({% if genre.background_image %}{{ genre.background_image.url }}{% else %}{% static 'img/default-genre-background.png' %}{% endif %}) center; background-size: cover;">
+                <!-- Genre Background Image -->
+            </div>
+            <div class="genre-description-container">
+                <p class="genre-description">
+                    {% if genre.description %}
+                        {{ genre.description }}
+                    {% else %}
+                        No description available for this genre.
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+
+        <div class="genre-tracks">
+            <h2>Tracks in {{ genre.name }} Genre</h2>
+            {% if genre.tracks.all %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Title</th>
+                        <th>Release Date</th>
+                        <th>Album</th>
+                        <th>Duration</th>
+                        <th>Actions</th>
+                        {% if is_authenticated %}
+                        <th>Like</th>
+                        {% endif %}
+    
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for track in genre.tracks.all %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ track.title }}</td>
+                        <td>{{ track.release_date }}</td>
+                        <td>{{ track.album }}</td>
+                        <td>{{ track.duration }}</td>
+                        <td>
+                            <audio id="audio-{{ forloop.counter }}" src="{{ track.audio_file.url }}" preload="none"></audio>
+                            <div class="actions">
+                                <button onclick="playAudio({{ forloop.counter }}, {{ is_authenticated|yesno:'true,false' }})">
+                                    <i class="fa fa-play"></i> Play
+                                </button>
+                                <button onclick="pauseAudio({{ forloop.counter }})">
+                                    <i class="fa fa-pause"></i> Pause
+                                </button>
+                            </div>
+                        </td>
+                        {% if is_authenticated %}
+                        <td>
+                            <button class="like-button" id="like-btn-{{ track.id }}"
+                                onclick="likeSong({{ track.id }})"
+                                {% if track.id in liked_tracks_ids %}
+                                    class="liked"
+                                {% endif %}
+                            >
+                                <i class="fa fa-heart"></i> 
+                                {% if track.id in liked_tracks_ids %}
+                                    Liked
+                                {% else %}
+                                    Like
+                                {% endif %}
+                            </button>
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6">No tracks available for {{ artist_name }}.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+                <p>No tracks available in this genre yet.</p>
+            {% endif %}
+        </div>
+
+        <div class="back-to-genres">
+            <a href="{% url 'view_all_genres' %}" class="back-to-genres-link">Back to Genres</a>
+        </div>
+    </div>
+
+    {% include "footer.html" %}
+
+    <script>
+        let currentAudio = null; // Keep track of the currently playing audio
+
+        function playAudio(trackId, isAuthenticated) {
+            const audio = document.getElementById(`audio-${trackId}`);
+            
+            // Stop currently playing audio if it exists and is different from the new audio
+            if (currentAudio && currentAudio !== audio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0; // Reset the audio to the start
+            }
+        
+            // Set the new audio as the current audio
+            currentAudio = audio;
+        
+            if (isAuthenticated) {
+                // Play without restrictions for authenticated users
+                audio.play();
+            } else {
+                // Limit playback to 30 seconds for unauthenticated users
+                audio.currentTime = 0; // Start from the beginning
+                audio.play();
+        
+                setTimeout(() => {
+                    // Stop playback after 30 seconds
+                    audio.pause();
+        
+                    // Show confirmation dialog
+                    const loginPrompt = confirm('Sign in to listen to the full track! Do you want to log in now?');
+                    
+                    // If the user clicks "OK" (i.e., they want to log in), redirect them to the login page
+                    if (loginPrompt) {
+                        window.location.href = '/login/'; // Redirect to login page
+                    } else {
+                        // If the user clicks "Cancel", stop the audio and prevent further play
+                        currentAudio = null;  // Clear the reference to current audio
+                    }
+                }, 30000); // Stop playback after 30 seconds
+            }
+        }
+
+        function pauseAudio(trackId) {
+            const audio = document.getElementById(`audio-${trackId}`);
+            if (audio) {
+                audio.pause();
+                if (currentAudio === audio) {
+                    currentAudio = null; // Clear currentAudio if paused
+                }
+            }
+        }
+
+        function likeSong(trackId) {
+            const likeButton = document.getElementById(`like-btn-${trackId}`);
+        
+            // Optimistic UI: Immediately update UI
+            if (likeButton.classList.contains('liked')) {
+                likeButton.classList.remove('liked');
+                likeButton.innerHTML = '<i class="fa fa-heart"></i> Like';
+            } else {
+                likeButton.classList.add('liked');
+                likeButton.innerHTML = '<i class="fa fa-heart"></i> Liked';
+            }
+        
+            // Send the request to the server to update the like status
+            fetch(`/like-song/${trackId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}', // Ensure CSRF token is included
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'unliked') {
+                    likeButton.classList.remove('liked');
+                    likeButton.innerHTML = '<i class="fa fa-heart"></i> Like';
+                } else if (data.status === 'liked') {
+                    likeButton.classList.add('liked');
+                    likeButton.innerHTML = '<i class="fa fa-heart"></i> Liked';
+                }
+            })
+            .catch(error => {
+                console.error('Error liking song:', error);
+                // If an error occurs, revert the UI change
+                if (likeButton.classList.contains('liked')) {
+                    likeButton.classList.remove('liked');
+                    likeButton.innerHTML = '<i class="fa fa-heart"></i> Like';
+                } else {
+                    likeButton.classList.add('liked');
+                    likeButton.innerHTML = '<i class="fa fa-heart"></i> Liked';
+                }
+            });
+        }        
+
+        function dislikeSong(trackId) {
+            alert('You disliked the song!');
+        }
+    </script>
+</body>
+</html>

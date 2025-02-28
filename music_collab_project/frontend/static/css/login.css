@@ -1,0 +1,116 @@
+/* General Layout for the page */
+body {
+    background-color: #ee10b0; /* Pink background */
+    font-family: 'Vazirmatn', sans-serif;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.login-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+}
+
+.login-to-continue {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* Login Form */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+    background-color: rgb(0, 0, 0);
+    padding: 20px;
+    border-radius: 24px;
+    width: 100%;
+}
+
+.input-group {
+    width: 100%;
+}
+
+.input-label {
+    font-size: 16px;
+    font-weight: 500;
+    color: white;
+    text-align: left;
+}
+
+.input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 2px solid #d9d9d9;
+    border-radius: 4px;
+    padding: 8px;
+    background-color: transparent;
+}
+
+.input-field {
+    width: 100%;
+    border: none;
+    background-color: transparent;
+    color: white;
+    font-size: 14px;
+    outline: none;
+    padding: 4px;
+}
+
+.input-field::placeholder {
+    color: white;
+    opacity: 0.7;
+}
+
+.input-wrapper svg {
+    fill: white;
+}
+
+/* Submit Button */
+.login-button .btn {
+    background-color: #ee10b0;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.login-button .btn:hover {
+    background-color: #cc0099;
+}
+
+/* Forgot Password Section */
+.forgot-password-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+}
+
+.forgot-password {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.forgot-password:hover {
+    color: #cc0099;
+}
+
+.arrow-icon {
+    fill: white;
+    cursor: pointer;
+}

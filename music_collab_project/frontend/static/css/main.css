@@ -1,0 +1,65 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(90.07deg, rgb(11, 3, 9) 0%, rgba(1, 10, 15, 0.92) 100%);
+}
+
+/* Main container for flex layout */
+.main-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+.right-container {
+    width: -webkit-fill-available;
+    padding: 20px;
+}
+/* Background image style */
+.bg-img {
+    border-radius: 25px;
+    width: 100%;
+    height: 595px;
+    position: absolute;
+    object-fit: cover;
+    padding: 67px 0px 0px 20px;
+    z-index: -1; /* Ensure background stays behind other content */
+}
+
+/* Header section for flex layout */
+.header2 {
+    display: flex;
+    flex-direction: column;
+    gap: 114px;
+    align-items: flex-start;
+    justify-content: center;
+    width: 95.37%;
+    position: absolute;
+    right: 2.31%;
+    left: 2.31%;
+    top: 16px;
+}
+
+/* Ensure the header fills available space */
+.header-div {
+    
+    width: 100%; /* Fallback for other browsers */
+}
+
+/* Optional: Ensure parents of absolute elements are relatively positioned */
+.relative-container {
+    position: relative;
+}
+
+/* Styling for the user-info section */
+.user-info {
+    font-family: 'Vazirmatn-Bold', sans-serif; /* You can change the font family as needed */
+    font-size: 18px; /* Adjust the font size */
+    color: #ffffff; /* White color for the username */
+    padding: 10px 20px; /* Add some padding around the username */
+    border-radius: 5px; /* Rounded corners */
+    text-align: center; /* Center the text */
+    max-width: 200px; /* Limit the width if desired */
+    overflow: hidden; /* Prevent text overflow */
+}
+
+

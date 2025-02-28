@@ -1,0 +1,81 @@
+/* auth.css */
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #1e1e1e;
+}
+
+.auth-box {
+    background-color: #333;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    width: 400px;
+    text-align: center;
+}
+
+.auth-box h2 {
+    color: white;
+    font-family: 'Vazirmatn-Bold', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    display: block;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #222;
+    color: #fff;
+}
+
+.form-group input:focus {
+    border-color: #ee10b0;
+    outline: none;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #ee10b0;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.submit-btn:hover {
+    background-color: #c40f8e;
+}
+
+p {
+    color: #fff;
+    font-size: 14px;
+}
+
+a {
+    color: #ee10b0;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
