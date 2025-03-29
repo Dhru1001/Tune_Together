@@ -1,0 +1,393 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ project.title }} - Collaboration</title>
+    <link rel="stylesheet" href="{% static 'css/header.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        :root {
+            --primary: #ee10b0;
+            --background: linear-gradient(90.07deg, rgb(11, 3, 9) 0%, rgba(1, 10, 15, 0.92) 100%);
+            --card-bg: rgb(0, 0, 0);
+        }
+
+        body {
+            background: var(--background);
+            font-family: 'Vazirmatn', sans-serif;
+            color: white;
+            min-height: 100vh;
+        }
+
+        .collaboration-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 1rem;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: var(--card-bg);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .project-header h1 {
+            font-size: 2.8rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .collab-grid {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+        }
+
+        /* Chat Section */
+        .collab-chat {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .chat-messages {
+            height: 60vh;
+            overflow-y: auto;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .message {
+            max-width: 75%;
+            padding: 1rem;
+            border-radius: 20px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            animation: messageAppear 0.3s ease;
+        }
+
+        .message.sent {
+            background: #1a0524;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message.received {
+            background: rgba(255, 255, 255, 0.1);
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+
+        .message-user {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .message-content {
+            word-break: break-word;
+        }
+
+        .message-time {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.7);
+            align-self: flex-end;
+            margin-top: 0.5rem;
+        }
+
+        /* Sidebar Sections */
+        .collab-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .task-card, .file-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .task-header, .file-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            margin-bottom: 1rem;
+        }
+
+        .task-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--primary);
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            margin-bottom: 1rem;
+        }
+
+        .message-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            color: white;
+            padding: 1rem;
+            border-radius: 15px;
+        }
+
+        .message-input:focus {
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 0 3px rgba(238, 16, 176, 0.25);
+        }
+
+        .align {
+            padding: 20px;
+        }
+
+        @keyframes messageAppear {
+            from {
+                transform: translateY(10px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="align">
+    {% include "header.html" %}
+</div>
+<div class="collaboration-container">
+    <div class="project-header">
+        <h1>{{ project.title }}</h1>
+        <p class="text-muted">{{ project.description }}</p>
+    </div>
+
+    <div class="collab-grid">
+        <!-- Main Chat Section -->
+        <div class="collab-chat">
+            <div class="chat-messages">
+                {% for message in messages %}
+                    <div class="message {% if message.sender == request.user %}sent{% else %}received{% endif %}">
+                        <div class="message-user">
+                            <div class="user-avatar">
+                                {{ message.sender.username|first|upper }}
+                            </div>
+                            <strong>{{ message.sender.username }}</strong>
+                        </div>
+                        <div class="message-content">
+                            {{ message.content }}
+                        </div>
+                        <span class="message-time">
+                            {{ message.timestamp|date:"H:i" }}
+                        </span>
+                    </div>
+                {% endfor %}
+            </div>
+            <form class="mt-3" onsubmit="sendMessage(event, {{ project.id }})">
+                <div class="input-group">
+                    <input type="text" id="message-input"
+                           class="form-control message-input"
+                           placeholder="Message...">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="bi bi-send"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="collab-sidebar">
+            <!-- Tasks Section -->
+            <div class="task-card">
+                <div class="task-header">
+                    <h3>Tasks</h3>
+                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#newTaskModal">
+                        <i class="bi bi-plus-lg"></i>
+                    </button>
+                </div>
+                {% for task in tasks %}
+                    <div class="task-item">
+                        <input type="checkbox" class="task-checkbox" data-task-id="{{ task.id }}"
+                               {% if task.status == 'done' %}checked{% endif %}>
+                        <div>
+                            <div class="fw-bold">{{ task.title }}</div>
+                            <small class="text-muted">{{ task.due_date|date:"M j" }}</small>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- Files Section -->
+            <div class="file-card">
+                <div class="file-header">
+                    <h3>Files</h3>
+                    <button class="btn btn-sm btn-primary">
+                        <i class="bi bi-upload"></i>
+                    </button>
+                </div>
+                {% for file in files %}
+                    <div class="file-item">
+                        <i class="bi bi-file-earmark-arrow-down fs-4"></i>
+                        <div>
+                            <a href="{{ file.file.url }}" class="d-block text-truncate" style="max-width: 200px;">
+                                {{ file.file.name|cut:"collaborations/files/" }}
+                            </a>
+                            <small class="text-muted">@{{ file.uploaded_by.username }}</small>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- New Task Modal -->
+<div class="modal fade" id="newTaskModal">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark">
+            <div class="modal-header">
+                <h5 class="modal-title">New Task</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form onsubmit="addTask(event, {{ project.id }})">
+                <div class="modal-body">
+                    <input type="text" id="task-title" class="form-control mb-3" placeholder="Title" required>
+                    <textarea id="task-description" class="form-control" placeholder="Description" rows="3"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Create Task</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Auto-scroll to bottom of chat
+    const chatMessages = document.querySelector('.chat-messages');
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    function sendMessage(event, projectId) {
+        event.preventDefault();
+        const input = document.getElementById('message-input');
+        // Add AJAX call here
+        input.value = '';
+    }
+
+    function addTask(event, projectId) {
+        event.preventDefault();
+        const title = document.getElementById('task-title').value;
+        const description = document.getElementById('task-description').value;
+
+        fetch(`/add-task/${projectId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken'), // Ensure you have CSRF token
+            },
+            body: JSON.stringify({title, description})
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Optionally, update the UI to show the new task
+                    // For example, you can append the new task to the task list
+                    bootstrap.Modal.getInstance(document.getElementById('newTaskModal')).hide();
+                    location.reload(); // Reload the page to see the new task
+                } else {
+                    alert('Failed to create task: ' + data.error);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    // Function to get CSRF token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Check if this cookie string begins with the name we want
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    document.querySelectorAll('.task-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('click', function () {
+            const taskId = this.dataset.taskId; // Get the task ID from the data attribute
+            const status = this.checked ? 'done' : 'todo'; // Determine status based on checkbox state
+
+            fetch(`/update-task/${taskId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken'), // Ensure you have CSRF token
+                },
+                body: JSON.stringify({status})
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.success) {
+                        alert('Failed to update task status: ' + data.error);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    });
+</script>
+</body>
+</html>

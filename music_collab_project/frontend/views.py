@@ -1,3 +1,6 @@
+import json
+
+from django.db import IntegrityError
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required  # Import the login decorator
 from django.contrib.auth import authenticate, login, logout
@@ -6,12 +9,13 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_POST
-
-from .forms import  TrackUploadForm
+from django.utils import timezone
+from .forms import TrackUploadForm
 from .models import *
 import logging
 
 logger = logging.getLogger(__name__)
+
 
 def signup(request):
     """
@@ -29,14 +33,14 @@ def signup(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            
+
             # Ensure profile exists
             if not hasattr(user, 'profile'):
                 UserProfile.objects.create(user=user)
-                
+
             user.profile.role = request.POST.get('role', 'listener')
             user.profile.save()
-            
+
             messages.success(request, "Account created! Please log in.")
             return redirect('login')
         else:
@@ -80,42 +84,50 @@ def custom_login(request):
     return render(request, 'login.html', {'form': form})
 
 
-
 def custom_logout(request):
     logout(request)
     return redirect('main')
+
 
 # Home page (public)
 def home(request):
     return render(request, "home.html")
 
+
 # Trial page (public)
 def trail(request):
     return render(request, "trial.html")
+
 
 # Main page (public)
 def main(request):
     albums = Album.objects.all()  # Retrieve all albums
     artists = Artist.objects.all()  # Retrieve all artists
     genres = Genre.objects.all()
-    musicians = User.objects.filter(profile__role='musician').exclude(id=request.user.id) if request.user.is_authenticated else []
-    return render(request, "main.html", {'albums': albums, 'artists': artists, 'genres': genres, 'musicians': musicians})
+    musicians = User.objects.filter(profile__role='musician').exclude(
+        id=request.user.id) if request.user.is_authenticated else []
+    return render(request, "main.html",
+                  {'albums': albums, 'artists': artists, 'genres': genres, 'musicians': musicians})
+
 
 # Discover page (public)
 def discover(request):
     artists = Artist.objects.all()
     return render(request, "discover.html", {'artists': artists})
 
+
 def most_played(request):
     # Assuming you have a 'play_count' field that tracks the number of plays
-    tracks = Track.objects.all().order_by('-play_count')[:10] # Top 10 most played tracks
+    tracks = Track.objects.all().order_by('-play_count')[:10]  # Top 10 most played tracks
     return render(request, 'most_played.html', {'tracks': tracks, 'is_authenticated': request.user.is_authenticated})
+
 
 def recently_added(request):
     # Fetch tracks ordered by their creation date (assuming a `created_at` field exists in your Track model)
     # Limit to the 10 most recent tracks
     tracks = Track.objects.all().order_by('-created_at')[:10]
-    return render(request, 'recently_added.html', {'tracks': tracks})  
+    return render(request, 'recently_added.html', {'tracks': tracks})
+
 
 def increment_play_count(request, track_id):
     if request.method == 'POST':
@@ -138,10 +150,11 @@ def view_all_artists(request):
     artists = Artist.objects.all()
     return render(request, "discover.html", {'artists': artists})
 
+
 def artist_list(request):
     # Get all artists from the database
     artists = Artist.objects.all()
-    
+
     # Pass the artists to the template
     return render(request, 'discover.html', {'artists': artists})
 
@@ -151,9 +164,10 @@ def album_songs_view(request, album_slug):
     context = {
         'album': album,
         'songs': album.songs.all(),
-        'is_authenticated': request.user.is_authenticated,# Use 'songs' instead of 'track_set'
+        'is_authenticated': request.user.is_authenticated,  # Use 'songs' instead of 'track_set'
     }
     return render(request, 'album_details.html', context)
+
 
 def view_all_genres(request):
     # Get all genres from the database
@@ -164,14 +178,17 @@ def view_all_genres(request):
         'genres': genres,
     })
 
+
 def music_genres_view(request):
     genres = Genre.objects.all()  # Fetch all genres
     return render(request, 'music_geners.html', {'genres': genres})
 
+
 def genre_detail_view(request, slug):
     genre = get_object_or_404(Genre, slug=slug)
     track = Track.objects.all()
-    return render(request, 'genre_detail.html', {'genre': genre, 'track': track, 'is_authenticated': request.user.is_authenticated})
+    return render(request, 'genre_detail.html',
+                  {'genre': genre, 'track': track, 'is_authenticated': request.user.is_authenticated})
 
 
 def artist_tracks(request, artist_name):
@@ -211,12 +228,11 @@ def artist_tracks(request, artist_name):
     })
 
 
-
-
 @login_required
 def your_playlists(request):
     playlists = Playlist.objects.filter(user=request.user)
     return render(request, 'your_playlists.html', {'playlists': playlists})
+
 
 def playlist_detail(request, playlist_id):
     """
@@ -233,6 +249,7 @@ def playlist_detail(request, playlist_id):
     playlist = get_object_or_404(Playlist, id=playlist_id, user=request.user)
     tracks = playlist.tracks.all()  # Assuming 'tracks' is a related field in your Playlist model
     return render(request, 'playlist_detail.html', {'playlist': playlist, 'tracks': tracks})
+
 
 @login_required
 def add_playlist(request):
@@ -263,7 +280,6 @@ def add_playlist(request):
     return render(request, 'add_playlist.html', {'tracks': tracks})
 
 
-
 # ... (other functions with similar documentation comments)
 def like_song(request, track_id):
     """
@@ -288,14 +304,14 @@ def like_song(request, track_id):
     return JsonResponse({'status': 'liked'})
 
 
-
-
 def liked_songs(request):
     try:
         liked_songs = LikedSong.objects.filter(user=request.user).select_related('track')
     except Exception as e:
         print("Error Fetching Liked Songs:", e)
-    return render(request, 'liked_songs.html', {'liked_songs': liked_songs, 'is_authenticated': request.user.is_authenticated})
+    return render(request, 'liked_songs.html',
+                  {'liked_songs': liked_songs, 'is_authenticated': request.user.is_authenticated})
+
 
 def search_view(request):
     query = request.GET.get('query', '')  # Get the search query from the URL
@@ -313,7 +329,7 @@ def search_view(request):
         'search_results.html',  # The template to display search results
         {'query': query, 'tracks': tracks, 'artists': artists, 'is_authenticated': request.user.is_authenticated}
     )
-    
+
 
 def preference_selection(request):
     if request.method == 'POST':
@@ -326,31 +342,12 @@ def preference_selection(request):
     return render(request, 'preference_selection.html', {'preferences': preferences})
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 @login_required
 def musician_dashboard(request):
     # First check musician role
     if request.user.profile.role != 'musician':
         return redirect('main')
-    
+
     try:
         # Get tracks for logged-in user
         user_tracks = Track.objects.filter(user=request.user)
@@ -358,13 +355,13 @@ def musician_dashboard(request):
         total_listens = sum(track.play_count for track in user_tracks)
         # followers_count = request.user.profile.followers.count()  # Fixed
         recent_uploads = user_tracks.order_by('-created_at')[:5]
-        
+
         # Collaboration requests
         collaboration_requests = CollaborationRequest.objects.filter(
-            status='pending', 
+            status='pending',
             receiver=request.user
         )
-        
+
         context = {
             'total_listens': total_listens,
             # 'followers_count': followers_count,
@@ -374,16 +371,18 @@ def musician_dashboard(request):
         }
         print(f"Context: {context}")  # Debug context
         print("=== DEBUG END ===\n")
-        
+
         return render(request, 'musician_dashboard.html', context)
-        
+
     except Exception as e:
         print(f"Error in dashboard: {str(e)}")
         return redirect('musician_dashboard')
 
+
 def calculate_revenue(user_profile):
     # Implement your revenue calculation logic here
-    return 1240 
+    return 1240
+
 
 @login_required
 def create_collaboration_request(request):
@@ -412,19 +411,119 @@ def create_collaboration_request(request):
     return render(request, 'create_collaboration_request.html', {'musicians': musicians})
 
 
+@login_required
+def collaboration_dashboard(request, project_id):
+    project = get_object_or_404(
+        CollaborationProject,
+        id=project_id,
+        participants=request.user
+    )
+
+    context = {
+        'project': project,
+        'messages': CollaborationMessage.objects.filter(project=project).order_by('timestamp'),
+        'files': SharedFile.objects.filter(project=project).order_by('-uploaded_at'),
+        'tasks': Task.objects.filter(project=project).order_by('due_date')
+    }
+    return render(request, 'collaboration/dashboard.html', context)
+
+
+@require_POST
+@login_required
+def send_collaboration_message(request, project_id):
+    project = get_object_or_404(
+        CollaborationProject,
+        id=project_id,
+        participants=request.user
+    )
+
+    message = CollaborationMessage.objects.create(
+        project=project,
+        sender=request.user,
+        content=request.POST.get('message')
+    )
+
+    return JsonResponse({
+        'status': 'success',
+        'message': message.content,
+        'sender': message.sender.username,
+        'timestamp': message.timestamp.strftime("%b %d, %Y %H:%M")
+    })
+
+
+def create_collaboration_project(sender, receiver, request):
+    # Check if project already exists
+    if CollaborationProject.objects.filter(request=request).exists():
+        return CollaborationProject.objects.get(request=request)
+
+    # Create new project
+    project = CollaborationProject.objects.create(
+        title=f"{sender.username} & {receiver.username} Collaboration",
+        description=request.description,
+        request=request
+    )
+    project.participants.add(sender, receiver)
+
+    # Create initial task
+    Task.objects.create(
+        project=project,
+        title="Initial Discussion",
+        description="Discuss project scope and requirements",
+        due_date=timezone.now() + timezone.timedelta(days=3),
+        assigned_to=receiver
+    )
+
+    # Send notification
+    try:
+        Notification.objects.create(
+            user=sender,
+            message=f"{receiver.username} accepted your collaboration request!",
+            link=f"/collaboration/{project.id}/"
+        )
+    except Exception as e:
+        logger.error(f"Error creating notification: {str(e)}")
+
+    return project
+
+
 @require_POST
 @login_required
 def accept_collaboration(request, request_id):
-    collab_request = get_object_or_404(CollaborationRequest, id=request_id, receiver=request.user)
+    try:
+        collab_request = get_object_or_404(
+            CollaborationRequest,
+            id=request_id,
+            receiver=request.user,
+            status='pending'
+        )
 
-    # Update status to accepted
-    collab_request.status = 'accepted'
-    collab_request.save()
+        # Prevent duplicate acceptance
+        if CollaborationProject.objects.filter(request=collab_request).exists():
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Collaboration already accepted'
+            }, status=400)
 
-    # Add collaboration logic here (e.g., create shared workspace, send notification)
-    # Example: create_channel_for_collaboration(collab_request)
+        collab_request.status = 'accepted'
+        collab_request.save()
 
-    return JsonResponse({'status': 'success', 'message': 'Collaboration accepted!'})
+        project = create_collaboration_project(
+            sender=collab_request.sender,
+            receiver=request.user,
+            request=collab_request
+        )
+
+        return JsonResponse({
+            'status': 'success',
+            'message': 'Collaboration accepted!',
+            'project_id': project.id
+        })
+
+    except IntegrityError as e:
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Collaboration already exists'
+        }, status=400)
 
 
 @require_POST
@@ -447,6 +546,39 @@ def decline_collaboration(request, request_id):
             status=500
         )
 
+
+@login_required
+def add_task(request, project_id):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        title = data.get('title')
+        description = data.get('description')
+
+        project = get_object_or_404(CollaborationProject, id=project_id)
+        task = Task.objects.create(
+            project=project,
+            title=title,
+            description=description,
+            assigned_to=request.user,  # or any logic to assign
+            due_date=timezone.now() + timezone.timedelta(days=7)  # Example due date
+        )
+        return JsonResponse({'success': True, 'task_id': task.id})
+    return JsonResponse({'success': False, 'error': 'Invalid request'}, status=400)
+
+
+@login_required
+def update_task(request, task_id):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        status = data.get('status')
+
+        task = get_object_or_404(Task, id=task_id)
+        task.status = status
+        task.save()
+        return JsonResponse({'success': True})
+    return JsonResponse({'success': False, 'error': 'Invalid request'})
+
+
 @login_required
 def upload_track(request):
     if request.method == 'POST':
@@ -461,7 +593,7 @@ def upload_track(request):
             messages.error(request, "Upload failed. Please correct the errors.")
     else:
         form = TrackUploadForm()
-    
+
     artists = Artist.objects.all()
     genres = Genre.objects.all()
     albums = Album.objects.all()  # Fetch all albums
@@ -472,6 +604,7 @@ def upload_track(request):
         'genres': genres,
         'albums': albums  # Pass 'albums' to the template
     })
+
 
 @login_required
 def add_artist(request):
@@ -494,6 +627,7 @@ def add_artist(request):
         return redirect('upload_track')
     return render(request, 'add_artist.html')
 
+
 @login_required
 def add_album(request):
     if request.method == 'POST':
@@ -508,12 +642,13 @@ def add_album(request):
                 artist=album_artist,
                 cover_image=album_cover_image,
                 release_date=album_release_date
- )
+            )
             messages.success(request, "Album added successfully!")
         else:
             messages.error(request, "Failed to add album. Please provide all required fields.")
         return redirect('upload_track')
     return render(request, 'add_album.html')
+
 
 @login_required
 def add_genre(request):

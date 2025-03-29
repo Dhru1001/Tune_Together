@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Musician Dashboard</title>
-    <link rel="stylesheet" href="{% static 'css/header.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/header.css' %}"/>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -85,7 +85,7 @@
             transition: background 0.3s;
         }
 
-    .btn-accept {
+        .btn-accept {
             background: transparent;
             border: 2px solid #00ff88;
             color: #00ff88;
@@ -127,6 +127,7 @@
             font-size: 1.2em;
             margin-right: 8px;
         }
+
         /* Stats Grid */
         .stats-grid {
             display: grid;
@@ -195,10 +196,12 @@
             border-radius: 8px;
             margin-bottom: 0.5rem;
         }
-        .image-align{
+
+        .image-align {
             display: flex;
         }
-        .card-content-align{
+
+        .card-content-align {
             display: flex;
             flex-direction: column;
             padding: 50px;
@@ -220,65 +223,67 @@
 </head>
 
 <body>
-    <div class="align">
-        {% include "header.html" %}
-    </div>
-    <div class="dashboard-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <h2>Music Studio</h2>
-            <nav class="sidebar-nav">
-                <a href="#" class="nav-item">Dashboard</a>
-                <a href="#" class="nav-item">My Tracks</a>
-                <a href="#" class="nav-item">Analytics</a>
-                <a href="#" class="nav-item">Collaborations</a>
-                <a href="#" class="nav-item">Settings</a>
-            </nav>
-        </aside>
+<div class="align">
+    {% include "header.html" %}
+</div>
+<div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <h2>Music Studio</h2>
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item">Dashboard</a>
+            <a href="#" class="nav-item">My Tracks</a>
+            <a href="#" class="nav-item">Analytics</a>
+            <a href="#" class="nav-item">Collaborations</a>
+            <a href="#" class="nav-item">Settings</a>
+        </nav>
+    </aside>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Message Display -->
-            {% if messages %}
-                <div class="container mt-3">
-                    {% for message in messages %}
-                        <div class="alert alert-{% if message.tags %}{{ message.tags }}{% else %}info{% endif %} alert-dismissible fade show" role="alert">
-                            {{ message }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-
-            <!-- Header -->
-            <header class="dashboard-header">
-                <h1>Welcome Back, {{ request.user.username }}!</h1>
-                <button class="upload-btn" onclick="window.location.href='{% url 'upload_track' %}'">+ New Upload</button>
-            </header>
-
-            <!-- Stats Grid -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h3>Total Listens</h3>
-                    <div class="stat-value">{{ total_listens }}</div>
-                    <span>+12% from last month</span>
-                </div>
-                <div class="stat-card">
-                    <h3>Followers</h3>
-                    {% comment %} <div class="stat-value">{{ followers_count }}</div> {% endcomment %}
-                    <span>+32 new today</span>
-                </div>
-                <div class="stat-card">
-                    <h3>Revenue</h3>
-                    <div class="stat-value">${{ revenue }}</div>
-                    <span>Available balance</span>
-                </div>
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Message Display -->
+        {% if messages %}
+            <div class="container mt-3">
+                {% for message in messages %}
+                    <div class="alert alert-
+                            {% if message.tags %}{{ message.tags }}{% else %}info{% endif %} alert-dismissible fade show"
+                         role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
             </div>
+        {% endif %}
 
-            <!-- Recent Uploads -->
-            <section class="uploads-section">
-                <h2>Recent Uploads</h2>
-                {% for track in recent_uploads %}
+        <!-- Header -->
+        <header class="dashboard-header">
+            <h1>Welcome Back, {{ request.user.username }}!</h1>
+            <button class="upload-btn" onclick="window.location.href='{% url 'upload_track' %}'">+ New Upload</button>
+        </header>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Listens</h3>
+                <div class="stat-value">{{ total_listens }}</div>
+                <span>+12% from last month</span>
+            </div>
+            <div class="stat-card">
+                <h3>Followers</h3>
+                {% comment %} <div class="stat-value">{{ followers_count }}</div> {% endcomment %}
+                <span>+32 new today</span>
+            </div>
+            <div class="stat-card">
+                <h3>Revenue</h3>
+                <div class="stat-value">${{ revenue }}</div>
+                <span>Available balance</span>
+            </div>
+        </div>
+
+        <!-- Recent Uploads -->
+        <section class="uploads-section">
+            <h2>Recent Uploads</h2>
+            {% for track in recent_uploads %}
                 <div class="upload-item">
                     <div>
                         <div class="image-align">
@@ -295,13 +300,13 @@
                     </div>
                     <div class="stat-value">{{ track.play_count }}</div>
                 </div>
-                {% endfor %}
-            </section>
+            {% endfor %}
+        </section>
 
-            <!-- Collaborations -->
-            <section>
-                <h2>Collaboration Requests</h2>
-                {% for request in collaboration_requests %}
+        <!-- Collaborations -->
+        <section>
+            <h2>Collaboration Requests</h2>
+            {% for request in collaboration_requests %}
                 <div class="collab-card" data-request-id="{{ request.id }}">
                     <div class="collab-tag">{{ request.type }}</div>
                     <hr>
@@ -318,81 +323,81 @@
                         </button>
                     </div>
                 </div>
-                {% empty %}
+            {% empty %}
                 <p>No collaboration requests at this time.</p>
-                {% endfor %}
-            </section>
-        </main>
-    </div>
+            {% endfor %}
+        </section>
+    </main>
+</div>
 
-    <!-- Demo Calendar Widget -->
-    <div style="max-width: 1400px; margin: 2rem auto; background: #000; border-radius: 16px; padding: 2rem;">
-        <h2>Upcoming Events</h2>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-            <div style="background: #ee10b0; padding: 1rem; border-radius: 12px;">
-                <h3>Album Release</h3>
-                <p>March 15, 2024</p>
-            </div>
-            <div style="background: #333; padding: 1rem; border-radius: 12px;">
-                <h3>Live Session</h3>
-                <p>March 22, 2024</p>
-            </div>
+<!-- Demo Calendar Widget -->
+<div style="max-width: 1400px; margin: 2rem auto; background: #000; border-radius: 16px; padding: 2rem;">
+    <h2>Upcoming Events</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+        <div style="background: #ee10b0; padding: 1rem; border-radius: 12px;">
+            <h3>Album Release</h3>
+            <p>March 15, 2024</p>
+        </div>
+        <div style="background: #333; padding: 1rem; border-radius: 12px;">
+            <h3>Live Session</h3>
+            <p>March 22, 2024</p>
         </div>
     </div>
+</div>
 <div id="toast-container" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
 </body>
 </html>
 
 
-
 <script>
-function handleCollaboration(action, requestId) {
-    const url = `/collaboration/${action}/${requestId}/`;
+    function handleCollaboration(action, requestId) {
+        const url = `/collaboration/${action}/${requestId}/`;
 
-    fetch(url, {
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': '{{ csrf_token }}',
-            'Content-Type': 'application/json'
-        },
-        credentials: 'same-origin'
-    })
-    .then(response => response.json())
-    .then(data => {
-        if(data.status === 'success') {
-            // Remove the card from UI for decline
-            if(action === 'decline') {
-                document.querySelector(`[data-request-id="${requestId}"]`).remove();
-            }
-            // Update UI for accept
-            if(action === 'accept') {
-                const card = document.querySelector(`[data-request-id="${requestId}"]`);
-                card.querySelector('.btn-accept').disabled = true;
-                card.querySelector('.btn-decline').disabled = true;
-                card.insertAdjacentHTML('beforeend', '<div class="badge bg-success mt-2">Collaboration Active</div>');
-            }
-            showToast(data.message, 'success');
-        }
-    })
-    .catch(error => {
-        showToast('Error processing request', 'danger');
-    });
-}
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+            },
+            credentials: 'same-origin'
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // Remove the card from UI for decline
+                    if (action === 'decline') {
+                        document.querySelector(`[data-request-id="${requestId}"]`).remove();
+                    }
+                    // Update UI for accept
+                    if (action === 'accept') {
+                        const card = document.querySelector(`[data-request-id="${requestId}"]`);
+                        card.querySelector('.btn-accept').disabled = true;
+                        card.querySelector('.btn-decline').disabled = true;
+                        card.insertAdjacentHTML('beforeend', '<div class="badge bg-success mt-2">Collaboration Active</div>');
+                        window.location.href = `/collaboration/${data.project_id}/`;
+                    }
+                    showToast(data.message, 'success');
+                }
+            })
+            .catch(error => {
+                showToast('Error processing request', 'danger');
+            });
+    }
 
-function showToast(message, type) {
-    const toast = document.createElement('div');
-    toast.className = `toast align-items-center text-white bg-${type} border-0`;
-    toast.innerHTML = `
+    function showToast(message, type) {
+        const toast = document.createElement('div');
+        toast.className = `toast align-items-center text-white bg-${type} border-0`;
+        toast.innerHTML = `
         <div class="d-flex">
             <div class="toast-body">${message}</div>
             <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
         </div>
     `;
 
-    const toastContainer = document.getElementById('toast-container');
-    toastContainer.appendChild(toast);
-    new bootstrap.Toast(toast).show();
+        const toastContainer = document.getElementById('toast-container');
+        toastContainer.appendChild(toast);
+        new bootstrap.Toast(toast).show();
 
-    setTimeout(() => toast.remove(), 3000);
-}
+        setTimeout(() => toast.remove(), 3000);
+    }
 </script>
