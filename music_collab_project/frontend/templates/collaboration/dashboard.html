@@ -316,11 +316,46 @@
     chatMessages.scrollTop = chatMessages.scrollHeight;
 
     function sendMessage(event, projectId) {
-        event.preventDefault();
-        const input = document.getElementById('message-input');
-        // Add AJAX call here
-        input.value = '';
+    event.preventDefault();
+    const input = document.getElementById('message-input');
+    const messageContent = input.value.trim(); // Get the message content
+
+    if (messageContent === '') {
+        alert('Please enter a message.'); // Prevent sending empty messages
+        return;
     }
+
+    fetch(`/send-message/${projectId}/`, { // Update the URL to match your Django URL pattern
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken'), // Ensure you have CSRF token
+        },
+        body: JSON.stringify({ message: messageContent }) // Send the message content
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            // Append the new message to the chat
+            const newMessage = document.createElement('div');
+            newMessage.className = 'message sent'; // Assuming the message is sent by the current user
+            newMessage.innerHTML = `
+                <div class="message-user">
+                    <div class="user-avatar">${data.sender.charAt(0).toUpperCase()}</div>
+                    <strong>${data.sender}</strong>
+                </div>
+                <div class="message-content">${data.message}</div>
+                <span class="message-time">${data.timestamp}</span>
+            `;
+            document.querySelector('.chat-messages').appendChild(newMessage);
+            input.value = ''; // Clear the input field
+            chatMessages.scrollTop = chatMessages.scrollHeight; // Auto-scroll to the bottom
+        } else {
+            alert('Failed to send message: ' + data.error);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
 
     function addTask(event, projectId) {
         event.preventDefault();

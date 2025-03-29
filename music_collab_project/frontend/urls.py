@@ -26,6 +26,7 @@ urlpatterns = [
     path('collaboration/decline/<int:request_id>/', decline_collaboration, name='decline_collaboration'),
     path('collaboration/<int:project_id>/', collaboration_dashboard, name='collaboration_dashboard'),
     path('collaboration/<int:project_id>/send-message/', send_collaboration_message, name='send_collaboration_message'),
+    path('send-message/<int:project_id>/', send_collaboration_message, name='send_message'),
     path('update-task/<int:task_id>/', update_task, name='update_task'),
     path('add-task/<int:project_id>/', add_task, name='add_task'),
     path('upload/', upload_track, name='upload_track'),

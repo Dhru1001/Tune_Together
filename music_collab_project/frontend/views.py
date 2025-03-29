@@ -436,11 +436,12 @@ def send_collaboration_message(request, project_id):
         id=project_id,
         participants=request.user
     )
+    message_content = json.loads(request.body).get('message')
 
     message = CollaborationMessage.objects.create(
         project=project,
         sender=request.user,
-        content=request.POST.get('message')
+        content=message_content
     )
 
     return JsonResponse({
