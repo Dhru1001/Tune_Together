@@ -231,11 +231,10 @@
     <aside class="sidebar">
         <h2>Music Studio</h2>
         <nav class="sidebar-nav">
-            <a href="#" class="nav-item">Dashboard</a>
-            <a href="#" class="nav-item">My Tracks</a>
-            <a href="#" class="nav-item">Analytics</a>
-            <a href="#" class="nav-item">Collaborations</a>
-            <a href="#" class="nav-item">Settings</a>
+            <a href="{% url 'musician_dashboard' %}" class="nav-item">Dashboard</a>
+            <a href="{% url 'my_tracks' %}" class="nav-item">My Tracks</a>
+            <a href="{% url 'analytics' %}" class="nav-item">Analytics</a>
+            <a href="{% url 'collaborations' %}" class="nav-item">Collaborations</a>
         </nav>
     </aside>
 
@@ -270,12 +269,12 @@
             </div>
             <div class="stat-card">
                 <h3>Followers</h3>
-                {% comment %} <div class="stat-value">{{ followers_count }}</div> {% endcomment %}
+                <div class="stat-value">{{ followers_count }}</div>
                 <span>+32 new today</span>
             </div>
             <div class="stat-card">
                 <h3>Revenue</h3>
-                <div class="stat-value">${{ revenue }}</div>
+                <div class="stat-value">₹{{ revenue }}</div>
                 <span>Available balance</span>
             </div>
         </div>

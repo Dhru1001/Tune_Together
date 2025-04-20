@@ -194,3 +194,12 @@ class Notification(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.message[:50]}"
+
+
+class UserSession(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    start_time = models.DateTimeField(auto_now_add=True)
+    duration = models.DurationField()  # Duration of the session
+
+    def __str__(self):
+        return f"{self.user.username} - {self.start_time}"

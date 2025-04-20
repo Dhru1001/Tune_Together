@@ -2,9 +2,12 @@ from django.urls import path
 from frontend.views import *
 
 urlpatterns = [
-    path("", home, name="home"),
+    path("", main, name="main"),
     path("trial", trail, name="trail"),
     path("main", main, name="main"),
+    path("about_us", about_us, name="about_us"),
+
+    path("faq", faq, name="faq"),
     path("discover", discover, name="discover"),
     path('view-all-albums/', view_all_albums, name='view_all_albums'),
     path('view-all-artists/', view_all_artists, name='view_all_artists'),
@@ -22,6 +25,10 @@ urlpatterns = [
     path('musician_dashboard/', musician_dashboard, name='musician_dashboard'),
     path('preferences/', preference_selection, name='preference_selection'),
     path('create-collaboration/', create_collaboration_request, name='create_collaboration_request'),
+    path('my-tracks/', my_tracks_view, name='my_tracks'),  # Define the URL pattern
+    path('analytics/', analytics_view, name='analytics'),
+    path('collaborations/', collaborations_view, name='collaborations'),
+    path('get-collaborations/', get_collaborations, name='get_collaborations'),
     path('collaboration/accept/<int:request_id>/', accept_collaboration, name='accept_collaboration'),
     path('collaboration/decline/<int:request_id>/', decline_collaboration, name='decline_collaboration'),
     path('collaboration/<int:project_id>/', collaboration_dashboard, name='collaboration_dashboard'),
@@ -29,6 +36,7 @@ urlpatterns = [
     path('send-message/<int:project_id>/', send_collaboration_message, name='send_message'),
     path('update-task/<int:task_id>/', update_task, name='update_task'),
     path('add-task/<int:project_id>/', add_task, name='add_task'),
+    path('upload-file/<int:project_id>/', upload_file, name='upload_file'),
     path('upload/', upload_track, name='upload_track'),
     path('add-artist/', add_artist, name='add_artist'),
     path('add-album/', add_album, name='add_album'),

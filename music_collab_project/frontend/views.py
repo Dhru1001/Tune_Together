@@ -1,5 +1,7 @@
 import json
+from datetime import timedelta
 
+from django.core.files.storage import default_storage
 from django.db import IntegrityError
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required  # Import the login decorator
@@ -94,6 +96,12 @@ def home(request):
     return render(request, "home.html")
 
 
+# about us
+def about_us(request):
+    return render(request, "about_us.html")
+
+def faq(request):
+    return render(request, "faq.html")
 # Trial page (public)
 def trail(request):
     return render(request, "trial.html")
@@ -364,7 +372,7 @@ def musician_dashboard(request):
 
         context = {
             'total_listens': total_listens,
-            # 'followers_count': followers_count,
+            'followers_count': followers_count(request.user.profile),
             'revenue': calculate_revenue(request.user.profile),  # Pass profile
             'recent_uploads': recent_uploads,
             'collaboration_requests': collaboration_requests,
@@ -381,8 +389,11 @@ def musician_dashboard(request):
 
 def calculate_revenue(user_profile):
     # Implement your revenue calculation logic here
-    return 1240
+    return 1568
 
+def followers_count(user_profile):
+    # Implement your revenue calculation logic here
+    return 224
 
 @login_required
 def create_collaboration_request(request):
@@ -419,10 +430,13 @@ def collaboration_dashboard(request, project_id):
         participants=request.user
     )
 
+    files = SharedFile.objects.filter(project=project).order_by('-uploaded_at')
+    print(f"Files: {files}")  # Debug statement
+
     context = {
         'project': project,
         'messages': CollaborationMessage.objects.filter(project=project).order_by('timestamp'),
-        'files': SharedFile.objects.filter(project=project).order_by('-uploaded_at'),
+        'files': files,
         'tasks': Task.objects.filter(project=project).order_by('due_date')
     }
     return render(request, 'collaboration/dashboard.html', context)
@@ -670,3 +684,93 @@ def add_genre(request):
             messages.error(request, "Failed to add genre. Please provide a name.")
         return redirect('upload_track')
     return render(request, 'add_genre.html')
+
+
+@login_required
+def my_tracks_view(request):
+    user_tracks = Track.objects.filter(user=request.user)  # Fetch tracks for the logged-in user
+    return render(request, 'my_tracks.html', {'tracks': user_tracks})  # Render the template with user tracks
+
+from django.db.models import Sum, Avg
+@login_required
+def analytics_view(request):
+    # Play count by genre
+    play_count_by_genre = Track.objects.filter(user=request.user) \
+        .values('genre__name') \
+        .annotate(total_plays=Sum('play_count')) \
+        .order_by('-total_plays')
+
+    # Most played tracks
+    most_played_tracks = Track.objects.filter(user=request.user) \
+        .order_by('-play_count')[:10]  # Top 10 tracks
+
+    # Average session duration
+    session_duration = UserSession.objects.filter(user=request.user) \
+        .values('start_time__date') \
+        .annotate(avg_duration=Avg('duration')) \
+        .order_by('start_time__date')
+
+    context = {
+        'play_count_by_genre': play_count_by_genre,
+        'most_played_tracks': most_played_tracks,
+        'session_duration': session_duration,
+    }
+    return render(request, 'analytics.html', context)
+
+
+@login_required
+def collaborations_view(request):
+    # Fetch collaboration requests and projects for the logged-in user
+    collaboration_requests = CollaborationRequest.objects.filter(receiver=request.user, status='pending')
+    active_projects = CollaborationProject.objects.filter(participants=request.user)
+
+    context = {
+        'collaboration_requests': collaboration_requests,
+        'active_projects': active_projects,
+    }
+    return render(request, 'collaborations.html', context)
+
+@login_required
+def get_collaborations(request):
+    # Fetch collaboration requests and projects for the logged-in user
+    collaboration_requests = CollaborationRequest.objects.filter(receiver=request.user, status='pending').values(
+        'id', 'title', 'description', 'type'
+    )
+    active_projects = CollaborationProject.objects.filter(participants=request.user).values(
+        'id', 'title', 'description'
+    )
+
+    data = {
+        'collaboration_requests': list(collaboration_requests),
+        'active_projects': list(active_projects),
+    }
+    return JsonResponse(data)
+
+@require_POST
+def upload_file(request, project_id):
+    try:
+        project = CollaborationProject.objects.get(id=project_id, participants=request.user)
+        uploaded_file = request.FILES['file']
+
+        # Debug: Print the uploaded file name
+        print(f"Uploaded file: {uploaded_file.name}")
+
+        # Save the file
+        file_path = default_storage.save(f'collaborations/files/{uploaded_file.name}', uploaded_file)
+
+        # Debug: Print the saved file path
+        print(f"File saved at: {file_path}")
+
+        # Create a SharedFile record
+        shared_file = SharedFile.objects.create(
+            project=project,
+            file=file_path,
+            uploaded_by=request.user
+        )
+
+        # Debug: Print the created SharedFile record
+        print(f"SharedFile created: {shared_file.id}")
+
+        return JsonResponse({'status': 'success', 'message': 'File uploaded successfully!'})
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'error': str(e)}, status=400)

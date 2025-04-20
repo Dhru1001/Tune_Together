@@ -268,7 +268,7 @@
             <div class="file-card">
                 <div class="file-header">
                     <h3>Files</h3>
-                    <button class="btn btn-sm btn-primary">
+                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#uploadFileModal">
                         <i class="bi bi-upload"></i>
                     </button>
                 </div>
@@ -282,6 +282,8 @@
                             <small class="text-muted">@{{ file.uploaded_by.username }}</small>
                         </div>
                     </div>
+                {% empty %}
+                    <p>No files uploaded yet.</p>
                 {% endfor %}
             </div>
         </div>
@@ -308,6 +310,27 @@
         </div>
     </div>
 </div>
+
+    <!-- File Upload Modal -->
+    <div class="modal fade" id="uploadFileModal">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title">Upload File</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="upload-file-form" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <input type="file" id="file-input" name="file" class="form-control" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Upload</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
@@ -423,6 +446,54 @@
                 .catch(error => console.error('Error:', error));
         });
     });
+
+    // Handle file upload
+    document.getElementById('upload-file-form').addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const formData = new FormData();
+        const fileInput = document.getElementById('file-input');
+        formData.append('file', fileInput.files[0]);
+
+        fetch(`/upload-file/{{ project.id }}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'), // Include CSRF token
+            },
+            body: formData,
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    showToast('File uploaded successfully!', 'success');
+                    location.reload(); // Reload the page to show the new file
+                } else {
+                    showToast('Failed to upload file: ' + data.error, 'danger');
+                }
+            })
+            .catch(error => {
+                showToast('Error uploading file', 'danger');
+                console.error('Error:', error);
+            });
+    });
+
+    // Show toast notifications
+    function showToast(message, type) {
+        const toast = document.createElement('div');
+        toast.className = `toast align-items-center text-white bg-${type} border-0`;
+        toast.innerHTML = `
+            <div class="d-flex">
+                <div class="toast-body">${message}</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        `;
+
+        const toastContainer = document.getElementById('toast-container');
+        toastContainer.appendChild(toast);
+        new bootstrap.Toast(toast).show();
+
+        setTimeout(() => toast.remove(), 3000);
+    }
 </script>
 </body>
 </html>
